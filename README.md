@@ -1,2 +1,2 @@
-# RestaurantApp
+# The RestaurantApp
 
