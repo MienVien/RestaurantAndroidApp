@@ -17,5 +17,7 @@ public class MainActivity extends AppCompatActivity {
 
         //This is a comment
 >>>>>>> 5c24906488b85cb348890d3f25593d3718d525f9
+
+                //hello dante
     }
 }
