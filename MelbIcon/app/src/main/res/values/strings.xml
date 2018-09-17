@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">MelbIcon</string>
+    <string name="orderMore">MelbIcon</string>
+    <string name="checkStatus">MelbIcon</string>
+    <string name="requestAssistance">MelbIcon</string>
+    <string name="finaliseBill">MelbIcon</string>
+
+
 </resources>
