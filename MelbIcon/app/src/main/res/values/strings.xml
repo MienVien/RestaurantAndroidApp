@@ -4,6 +4,9 @@
     <string name="checkStatus">MelbIcon</string>
     <string name="requestAssistance">MelbIcon</string>
     <string name="finaliseBill">MelbIcon</string>
+    <string name="backbutton">backbutton</string>
+    <string name="txtmain" />
+    <string name="txtsub" />
 
 
 </resources>
