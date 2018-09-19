@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 
 public class MainActivity extends Activity {
@@ -18,8 +19,11 @@ public class MainActivity extends Activity {
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
 
-
-
         setContentView(R.layout.activity_wait_screen);
+
+
+
+
+
     }
 }
