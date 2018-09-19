@@ -43,7 +43,6 @@ public class WaitScreen extends Activity {
         finaliseBillButton = findViewById(R.id.finalisebill);
 
 
-
         requestAssistanceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
