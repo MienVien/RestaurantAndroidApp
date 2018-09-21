@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.util.DisplayMetrics;
@@ -47,10 +48,9 @@ public class WaitScreen extends Activity {
         orderMoreButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
-
-                //navigate to 'Order More' screen
-                setContentView(R.layout.activity_main);
-
+            //navigate to 'Home (TEMP)' screen --EXPLICIT INTENT
+            Intent navigate = new Intent(WaitScreen.this, MainActivity.class);
+            startActivity(navigate);
             }
         });
 
@@ -58,10 +58,9 @@ public class WaitScreen extends Activity {
         checkStatusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
-
-                //navigate to 'Order Status' screen
-                //setContentView(R.layout.activity_main);
-
+            //navigate to 'Check Status' screen --EXPLICIT INTENT
+            Intent navigate = new Intent(WaitScreen.this, StatusView.class);
+            startActivity(navigate);
             }
         });
 
@@ -69,22 +68,22 @@ public class WaitScreen extends Activity {
         requestAssistanceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder mBuilder = new AlertDialog.Builder(WaitScreen.this);
-                View mView = getLayoutInflater().inflate(R.layout.request_assistance_overlay, null);
+            AlertDialog.Builder mBuilder = new AlertDialog.Builder(WaitScreen.this);
+            View mView = getLayoutInflater().inflate(R.layout.request_assistance_overlay, null);
 
-                mBuilder.setView(mView);
-                final AlertDialog dialog = mBuilder.create();
+            mBuilder.setView(mView);
+            final AlertDialog dialog = mBuilder.create();
 
-                dialog.show();
+            dialog.show();
 
-                stopButton = mView.findViewById(R.id.stopButton);
+            stopButton = mView.findViewById(R.id.stopButton);
 
-                stopButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                            dialog.cancel();
-                    }
-                });
+            stopButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.cancel();
+                }
+            });
             }
         });
 
@@ -93,10 +92,9 @@ public class WaitScreen extends Activity {
         finaliseBillButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
-
-                //navigate to 'Order Status' screen
-                setContentView(R.layout.activity_payment);
-
+            //navigate to 'Order Status' screen --EXPLICIT INTENT
+            Intent navigate = new Intent(WaitScreen.this, Payment.class);
+            startActivity(navigate);
             }
         });
 

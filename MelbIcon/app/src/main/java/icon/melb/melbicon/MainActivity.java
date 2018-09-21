@@ -21,20 +21,5 @@ public class MainActivity extends Activity {
 
         setContentView(R.layout.activity_main);
 
-        Button backButton = findViewById(R.id.backButton);
-
-        backButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                setContentView(R.layout.activity_wait_screen);
-            }
-        });
-
-
-
-
-
-
-
     }
 }

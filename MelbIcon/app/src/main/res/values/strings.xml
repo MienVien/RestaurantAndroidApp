@@ -22,6 +22,8 @@
     <string name="paypal" />
     <string name="visa" />
     <string name="cash" />
+    <string name="table">Table</string>
+    <string name="back_button">Back Button</string>
 
 
 </resources>

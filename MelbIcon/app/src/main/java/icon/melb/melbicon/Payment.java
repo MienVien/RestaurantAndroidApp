@@ -2,6 +2,7 @@ package icon.melb.melbicon;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,7 +15,7 @@ import android.widget.ImageButton;
 
 public class Payment extends Activity {
 
-    ImageButton backButton;
+    private ImageButton backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +33,8 @@ public class Payment extends Activity {
         backButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                setContentView(R.layout.activity_main);
+                Intent navigate = new Intent(Payment.this,WaitScreen.class);
+                startActivity(navigate);
             }
         });
     }
