@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ap1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    tools:context=".Payment">
+
+    <!-- The primary full-screen view. This can be replaced with whatever view
+         is needed to present your content, e.g. VideoView, SurfaceView,
+         TextureView, etc. -->
+
+    <!-- This FrameLayout insets its children based on system windows using
+         android:fitsSystemWindows. -->
+
+
+    <TextView
+        android:id="@+id/header"
+        android:layout_width="310dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="355dp"
+        android:layout_marginStart="355dp"
+        android:layout_marginTop="50dp"
+        android:fontFamily="@font/cambay"
+        android:text="BILL SUMMARY"
+        android:textAlignment="center"
+        android:textSize="40sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="BILL SUMMARY" />
+
+    <ImageButton
+        android:id="@+id/backButton"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:layout_marginEnd="275dp"
+        android:layout_marginStart="29dp"
+        android:layout_marginTop="40dp"
+        android:background="#00FFFFFF"
+        android:contentDescription="@string/back"
+        android:scaleType="fitXY"
+        android:src="@mipmap/backicon"
+        app:layout_constraintEnd_toStartOf="@+id/header"
+        app:layout_constraintHorizontal_bias="0.25"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/horizontalLine"
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/header"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="10dp"
+        android:background="#FF525252"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/header"
+        app:layout_constraintVertical_bias="0.012" />
+
+    <TextView
+        android:id="@+id/PaymentHeader"
+        android:layout_width="427dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="355dp"
+        android:layout_marginStart="355dp"
+        android:layout_marginTop="404dp"
+        android:fontFamily="@font/cambay"
+        android:text="CHOOSE PAYMENT METHOD"
+        android:textAlignment="center"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/header"
+        tools:text="CHOOSE PAYMENT METHOD" />
+
+    <View
+        android:id="@+id/horizontalLine2"
+        android:layout_width="305dp"
+        android:layout_height="1dp"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/header"
+        android:layout_marginBottom="167dp"
+        android:background="#FF525252"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <View
+        android:id="@+id/horizontalLine3"
+        android:layout_width="305dp"
+        android:layout_height="1dp"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/header"
+        android:layout_marginBottom="167dp"
+        android:background="#FF525252"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+    <LinearLayout
+        android:id="@+id/p1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="50dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/PaymentHeader">
+
+        <ImageButton
+            android:id="@+id/andrpay"
+            android:layout_width="176dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:adjustViewBounds="false"
+            android:background="#00ffffff"
+            android:contentDescription="@string/andrpay"
+            android:paddingHorizontal="15px"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/androidpay" />
+
+        <ImageButton
+            android:id="@+id/paypal"
+            android:layout_width="303dp"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            android:background="#00ffffff"
+            android:contentDescription="@string/paypal"
+            android:paddingHorizontal="15px"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/paypal" />
+
+        <ImageButton
+            android:id="@+id/visa"
+            android:layout_width="200dp"
+            android:layout_height="87dp"
+            android:layout_weight="1"
+            android:background="#00ffffff"
+            android:contentDescription="@string/visa"
+            android:paddingHorizontal="15px"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/visa" />
+
+
+        <ImageButton
+            android:id="@+id/cash"
+            android:layout_width="185dp"
+            android:layout_height="104dp"
+            android:layout_weight="1"
+            android:adjustViewBounds="false"
+            android:background="#00ffffff"
+            android:contentDescription="@string/cash"
+            android:paddingHorizontal="15px"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/cashstack" />
+
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

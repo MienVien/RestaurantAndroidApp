@@ -24,14 +24,14 @@
         android:contentDescription="signal graphic"
         android:scaleType="fitXY"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/textView"
+        app:layout_constraintBottom_toTopOf="@+id/textMain"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:src="@mipmap/signalgraph" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textMain"
         android:layout_width="854dp"
         android:layout_height="65dp"
         android:layout_marginBottom="270dp"
@@ -47,7 +47,7 @@
         app:layout_constraintVertical_bias="1.0" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textSub"
         android:layout_width="854dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="19dp"
@@ -56,41 +56,36 @@
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/textMain" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/textSub2"
         android:layout_width="807dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="143dp"
         android:text="SHORTLY"
         android:textAlignment="center"
         android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/backButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.428"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/textSub" />
 
-    <ImageButton
-        android:id="@+id/backButton"
-        android:layout_width="68dp"
-        android:layout_height="68dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="500dp"
-        android:layout_weight="1"
-        android:background="#00ffffff"
-        android:contentDescription="@string/backbutton"
-        android:scaleType="fitXY"
-        android:src="@mipmap/backicon"
+    <Button
+        android:id="@+id/stopButton"
+        android:layout_width="222dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="28dp"
+        android:layout_marginEnd="290dp"
+        android:layout_marginStart="291dp"
+        android:layout_marginTop="94dp"
+        android:background="#FF8E0106"
+        android:text="STOP REQUEST"
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
+        app:layout_constraintTop_toBottomOf="@+id/textSub2"
+        tools:text="STOP REQUEST" />
 
 
 </android.support.constraint.ConstraintLayout>

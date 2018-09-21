@@ -20,21 +20,21 @@ import android.widget.TextView;
 
 public class WaitScreen extends Activity {
 
-    ImageButton orderMoreButton;
-    ImageButton checkStatusButton;
-    ImageButton requestAssistanceButton;
-    ImageButton finaliseBillButton;
-    ImageButton backButton;
+    private ImageButton orderMoreButton;
+    private ImageButton checkStatusButton;
+    private ImageButton requestAssistanceButton;
+    private ImageButton finaliseBillButton;
+    private Button stopButton;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Hide the status bar.
-        View decorView = getWindow().getDecorView();
-        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
-        decorView.setSystemUiVisibility(uiOptions);
+//        // Hide the status bar.
+//        View decorView = getWindow().getDecorView();
+//        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+//        decorView.setSystemUiVisibility(uiOptions);
 
         setContentView(R.layout.activity_wait_screen);
 
@@ -43,7 +43,29 @@ public class WaitScreen extends Activity {
         requestAssistanceButton = findViewById(R.id.reqassistance);
         finaliseBillButton = findViewById(R.id.finalisebill);
 
+        //ORDER MORE BUTTON
+        orderMoreButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
 
+                //navigate to 'Order More' screen
+                setContentView(R.layout.activity_main);
+
+            }
+        });
+
+        //CHECK STATUS BUTTON
+        checkStatusButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+
+                //navigate to 'Order Status' screen
+                //setContentView(R.layout.activity_main);
+
+            }
+        });
+
+        //REQUEST ASSISTANCE BUTTON
         requestAssistanceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,9 +77,9 @@ public class WaitScreen extends Activity {
 
                 dialog.show();
 
-                backButton = mView.findViewById(R.id.backButton);
+                stopButton = mView.findViewById(R.id.stopButton);
 
-                backButton.setOnClickListener(new View.OnClickListener() {
+                stopButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                             dialog.cancel();
@@ -65,43 +87,18 @@ public class WaitScreen extends Activity {
                 });
             }
         });
-    }
 
-//    private void showMyDialog(Context context) {
-//        final Dialog dialog = new Dialog(context);
-//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        dialog.setContentView(R.layout.request_assistance_overlay);
-//        dialog.setCanceledOnTouchOutside(false);
-//        dialog.setCancelable(true);
-//
-//        TextView textView = (TextView) dialog.findViewById(R.id.txtTitle);
-//        ListView listView = (ListView) dialog.findViewById(R.id.listView);
-//        Button btnBtmLeft = (Button) dialog.findViewById(R.id.btnBtmLeft);
-//        Button btnBtmRight = (Button) dialog.findViewById(R.id.btnBtmRight);
-//
-//        btnBtmLeft.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                dialog.dismiss();
-//            }
-//        });
-//
-//        btnBtmRight.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // do whatever you want here
-//            }
-//        });
-//
-//        /**
-//         * if you want the dialog to be specific size, do the following
-//         * this will cover 85% of the screen (85% width and 85% height)
-//         */
-//        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-//        int dialogWidth = (int)(displayMetrics.widthPixels * 0.85);
-//        int dialogHeight = (int)(displayMetrics.heightPixels * 0.85);
-//        dialog.getWindow().setLayout(dialogWidth, dialogHeight);
-//
-//        dialog.show();
-//    }
+
+        //FINALISE BILL BUTTON
+        finaliseBillButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+
+                //navigate to 'Order Status' screen
+                setContentView(R.layout.activity_payment);
+
+            }
+        });
+
+    }
 }

@@ -19,7 +19,18 @@ public class MainActivity extends Activity {
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
 
-        setContentView(R.layout.activity_wait_screen);
+        setContentView(R.layout.activity_main);
+
+        Button backButton = findViewById(R.id.backButton);
+
+        backButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                setContentView(R.layout.activity_wait_screen);
+            }
+        });
+
+
 
 
 

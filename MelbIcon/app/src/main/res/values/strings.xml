@@ -1,12 +1,27 @@
 <resources>
     <string name="app_name">MelbIcon</string>
-    <string name="orderMore">MelbIcon</string>
-    <string name="checkStatus">MelbIcon</string>
-    <string name="requestAssistance">MelbIcon</string>
-    <string name="finaliseBill">MelbIcon</string>
-    <string name="backbutton">backbutton</string>
-    <string name="txtmain" />
-    <string name="txtsub" />
+    <string name="orderMore">Order More</string>
+    <string name="checkStatus">Check Status</string>
+    <string name="requestAssistance">Request Assistance</string>
+    <string name="finaliseBill">Finalise Bill</string>
+    <string name="stopButton">STOP REQUEST</string>
+    <string name="back" />
+    <string name="txtMain" />
+    <string name="txtSub" />
+    <string name="txtSub2" />
+
+    <string name="title_activity_main">Home</string>
+    <string name="title_activity_payment">Payment</string>
+    <string name="title_activity_status_view">Status</string>
+    <string name="title_activity_wait_screen">Wait Screen</string>
+    <string name="title_activity_request_assistance_overlay">Request Assistance</string>
+
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="andrpay" />
+    <string name="paypal" />
+    <string name="visa" />
+    <string name="cash" />
 
 
 </resources>

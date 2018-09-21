@@ -7,17 +7,38 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
+        android:screenOrientation="landscape"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".WaitScreen">
+        <activity
+            android:name=".WaitScreen"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_wait_screen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
-        <activity android:name=".StatusView"></activity>
-    </application>
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_main">
+        </activity>
+        <activity
+            android:name=".StatusView"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_status_view">
+        </activity>
+        <activity
+            android:name=".Payment"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_payment">
+        </activity>
 
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
+    </application>
 </manifest>
