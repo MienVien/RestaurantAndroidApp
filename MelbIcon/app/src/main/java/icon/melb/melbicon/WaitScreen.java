@@ -24,6 +24,7 @@ public class WaitScreen extends Activity {
     ImageButton checkStatusButton;
     ImageButton requestAssistanceButton;
     ImageButton finaliseBillButton;
+    ImageButton backButton;
 
 
     @Override
@@ -50,13 +51,20 @@ public class WaitScreen extends Activity {
                 View mView = getLayoutInflater().inflate(R.layout.request_assistance_overlay, null);
 
                 mBuilder.setView(mView);
-                AlertDialog dialog = mBuilder.create();
+                final AlertDialog dialog = mBuilder.create();
+
                 dialog.show();
+
+                backButton = mView.findViewById(R.id.backButton);
+
+                backButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                            dialog.cancel();
+                    }
+                });
             }
         });
-
-
-
     }
 
 //    private void showMyDialog(Context context) {
