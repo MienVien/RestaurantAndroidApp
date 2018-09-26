@@ -12,7 +12,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="127dp"
+        android:layout_marginStart="124dp"
+        android:layout_marginTop="30dp"
         android:text="Current Order"
         android:textSize="50sp" />
 
@@ -24,7 +25,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="129dp"
         android:background="?android:attr/listDivider"
-        android:backgroundTint="@android:color/holo_blue_dark"
+        android:backgroundTint="@android:color/black"
+        android:foreground="@android:color/darker_gray"
         android:visibility="visible" />
 
     <LinearLayout

@@ -1,6 +1,8 @@
 package icon.melb.melbicon;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,6 +14,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,33 +24,33 @@ import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import io.fabric.sdk.android.Fabric;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.ContentValues.TAG;
+
 public class MainMenu extends AppCompatActivity {
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
     private ViewPager mViewPager;
     private TabLayout tabLayout;
-   // private DatabaseReference mRef;
+    private List<Item> lstSpecial, lstStarter, lstMain, lstSide, lstDessert, lstDrinks;
+    private DatabaseReference mRef;
+    private List<Order> order;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,8 +59,20 @@ public class MainMenu extends AppCompatActivity {
 
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        lstSpecial = new ArrayList<>();
+        lstStarter = new ArrayList<>();
+        lstMain = new ArrayList<>();
+        lstSide = new ArrayList<>();
+        lstDessert = new ArrayList<>();
+        lstDrinks = new ArrayList<>();
+
+        operateDatabse();
+
+        order = new ArrayList<>();
+
+        //Pass Order to other activities for use
+        passOrderToActivity(Tab1_Specials.class);
+
         // Create the adapter that will return a fragment for each of the six
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -76,7 +91,6 @@ public class MainMenu extends AppCompatActivity {
 
         setupTabIcons();
 
-       // FirebaseDatabase.getInstance().getReference();
     }
 
     private void setupTabIcons() {
@@ -141,24 +155,43 @@ public class MainMenu extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
             //Returning the current tabs
+            Bundle args;
             switch (position) {
                 case 0:
                     Tab1_Specials tab1 = new Tab1_Specials();
+                    args = new Bundle();
+                    args.putSerializable("SpecialsList", (Serializable) lstSpecial);
+                    tab1.setArguments(args);
                     return tab1;
                 case 1:
                     Tab2_Starters tab2 = new Tab2_Starters();
+                    args = new Bundle();
+                    args.putSerializable("StartersList", (Serializable) lstStarter);
+                    tab2.setArguments(args);
                     return tab2;
                 case 2:
                     Tab3_Mains tab3 = new Tab3_Mains();
+                    args = new Bundle();
+                    args.putSerializable("MainsList", (Serializable) lstMain);
+                    tab3.setArguments(args);
                     return tab3;
                 case 3:
                     Tab4_Sides tab4 = new Tab4_Sides();
+                    args = new Bundle();
+                    args.putSerializable("SidesList", (Serializable) lstSide);
+                    tab4.setArguments(args);
                     return tab4;
                 case 4:
                     Tab5_Dessert tab5 = new Tab5_Dessert();
+                    args = new Bundle();
+                    args.putSerializable("DessertList", (Serializable) lstDessert);
+                    tab5.setArguments(args);
                     return tab5;
                 case 5:
                     Tab6_Drinks tab6 = new Tab6_Drinks();
+                    args = new Bundle();
+                    args.putSerializable("DrinksList", (Serializable) lstDrinks);
+                    tab6.setArguments(args);
                     return tab6;
                 default:
                     return null;
@@ -170,5 +203,54 @@ public class MainMenu extends AppCompatActivity {
             // Show 6 total pages.
             return 6;
         }
+    }
+
+    private void operateDatabse() {
+        mRef = FirebaseDatabase.getInstance().getReference("menu");
+        mRef.keepSynced(true);
+
+        DatabaseReference menu = mRef.child("menu");
+        DatabaseReference special = menu.child("0").child("special");
+        DatabaseReference starter = menu.child("1").child("starter");
+        DatabaseReference main = menu.child("2").child("main");
+        DatabaseReference side = menu.child("3").child("side");
+        DatabaseReference dessert = menu.child("4").child("dessert");
+        DatabaseReference drinks = menu.child("5").child("drinks");
+
+        lstSpecial = getDatabase(special);
+        lstStarter = getDatabase(starter);
+        lstMain = getDatabase(main);
+        lstSide = getDatabase(side);
+        lstDessert = getDatabase(dessert);
+        lstDrinks = getDatabase(drinks);
+    }
+
+    private List<Item> getDatabase(DatabaseReference dataRef) {
+        final List<Item> dataList = new ArrayList<>();
+
+        dataRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    Item item = child.getValue(Item.class);
+                    dataList.add(item);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.v(TAG, "loadPost:onCancelled", databaseError.toException());
+            }
+        });
+
+        return dataList;
+    }
+
+    public void passOrderToActivity(Class targetActivity) {
+        Intent intent = new Intent(this, targetActivity);
+        intent.putExtra("Order", (Serializable) order);
+        //getIntent().getSerializableExtra("Order");
     }
 }

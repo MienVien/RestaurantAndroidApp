@@ -1,5 +1,6 @@
 package icon.melb.melbicon;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -30,11 +33,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public RecyclerViewAdapter(Context mContext, List<Item> mData) {
         this.mContext = mContext;
         this.mData = mData;
-    }
-
-    public void delete(int position) {
-        mData.remove(position);
-        notifyItemRemoved(position);
     }
 
     @Override
@@ -82,7 +80,71 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         @Override
         public void onClick(View v) {
-            //delete(getLayoutPosition());
+            final Item item = mData.get(getLayoutPosition());
+            View view;
+
+            AlertDialog.Builder mBuilder = new AlertDialog.Builder(mContext);
+
+            LayoutInflater mInflater = LayoutInflater.from(mContext);
+
+            view = mInflater.inflate(R.layout.item_onclick_dialog, null);
+
+            TextView title = (TextView) view.findViewById(R.id.titleTextView);
+            title.setText(item.getTitle());
+
+            ImageButton backBtn = (ImageButton) view.findViewById(R.id.backBtn);
+
+            final TextView amount = (TextView) view.findViewById(R.id.amountTextView);
+
+            Button decreaseBtn = (Button) view.findViewById(R.id.decreaseBtn);
+            decreaseBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int quantityOrdered = item.getQuantityOrdered();
+                    if (quantityOrdered > 1) {
+                        quantityOrdered--;
+                        item.setQuantityOrdered(quantityOrdered);
+                        amount.setText(Integer.toString(quantityOrdered));
+                    }
+                }
+            });
+            Button increaseBtn = (Button) view.findViewById(R.id.increaseBtn);
+            increaseBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int quantityOrdered = item.getQuantityOrdered();
+                    quantityOrdered++;
+                    item.setQuantityOrdered(quantityOrdered);
+                    amount.setText(Integer.toString(quantityOrdered));
+                }
+            });
+
+            TextView priceTextView = (TextView) view.findViewById(R.id.priceTextView);
+            priceTextView.setText("$" + item.getPrice() + " * " + amount.getText() + " = " + item.getPrice()*Integer.parseInt(amount.getText().toString()));
+
+            EditText note = (EditText) view.findViewById(R.id.addNotes);
+
+            Button addBtn = (Button) view.findViewById(R.id.addBtn);
+            addBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    
+                }
+            });
+
+            mBuilder.setView(view);
+
+            final AlertDialog dialog = mBuilder.create();
+
+            backBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+
+            dialog.show();
+
             Toast.makeText(mContext, "Item clicked at " + getLayoutPosition(), Toast.LENGTH_SHORT).show();
         }
     }
