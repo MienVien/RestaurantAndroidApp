@@ -22,6 +22,11 @@ import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import io.fabric.sdk.android.Fabric;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,11 +47,14 @@ public class MainMenu extends AppCompatActivity {
      */
     private ViewPager mViewPager;
     private TabLayout tabLayout;
-
+   // private DatabaseReference mRef;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main_menu);
+
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -68,6 +76,7 @@ public class MainMenu extends AppCompatActivity {
 
         setupTabIcons();
 
+       // FirebaseDatabase.getInstance().getReference();
     }
 
     private void setupTabIcons() {
@@ -158,7 +167,7 @@ public class MainMenu extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
+            // Show 6 total pages.
             return 6;
         }
     }

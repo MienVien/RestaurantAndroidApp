@@ -1,9 +1,8 @@
 package icon.melb.melbicon;
 
 import android.app.AlertDialog;
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,15 +11,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.GridView;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.content.ContentValues.TAG;
 
 public class Tab1_Specials extends Fragment {
     List<Item> lstItem;
@@ -31,8 +34,10 @@ public class Tab1_Specials extends Fragment {
 
     ImageButton homeBtn, viewOrderBtn, assistantBtn;
 
+    private DatabaseReference mRef;
+
     public Tab1_Specials() {
-        // Required empty public constructor
+
     }
 
     @Override
@@ -41,41 +46,27 @@ public class Tab1_Specials extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.tab1__specials, container, false  );
 
-        lstItem = getData();
+        operateDatabse();
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerview);
-
-        mAdapter = new RecyclerViewAdapter(getActivity(), lstItem);
-
-        mRecyclerView.setAdapter(mAdapter);
 
         mGridLayout = new GridLayoutManager(getActivity(), 4);
 
         mRecyclerView.setLayoutManager(mGridLayout);
+
+        mRecyclerView.setHasFixedSize(true);
+
+        mAdapter = new RecyclerViewAdapter(getActivity(), lstItem);
+
+        mRecyclerView.setAdapter(mAdapter);
 
         homeBtn = (ImageButton) view.findViewById(R.id.homeButton);
         viewOrderBtn = (ImageButton) view.findViewById(R.id.viewOrderButton);
         assistantBtn = (ImageButton) view.findViewById(R.id.assistantButton);
 
         setButtonAction();
+
         return view;
-    }
-
-    public static List<Item> getData() {
-        List<Item> data = new ArrayList<>();
-        String[] names = {"Chicken Parma", "Broken Rice", "Noodle Soup"};
-        String[] descriptions = {"This is made by Chicken", "This is made by rice", "This is made by noodle"};
-        int[] prices = {11, 15, 14};
-        Boolean[] isVegetarians = {false, true, false};
-        int[] images = {R.mipmap.drinksicon, R.mipmap.specialsicons, R.mipmap.cookingstatusicon};
-
-        for (int i=0; i<100; i++) {
-            int k = i % names.length;
-            Item item = new Item(names[k], descriptions[k], prices[k], isVegetarians[k], images[k]);
-            data.add(item);
-        }
-
-        return data;
     }
 
     private void setButtonAction() {
@@ -125,5 +116,40 @@ public class Tab1_Specials extends Fragment {
         mBuilder.setView(mView);
         AlertDialog dialog = mBuilder.create();
         dialog.show();
+    }
+
+    private void operateDatabse() {
+        mRef = FirebaseDatabase.getInstance().getReference("menu");
+        DatabaseReference menu = mRef.child("menu");
+        DatabaseReference special = menu.child("0").child("special");
+
+        lstItem = getDatabase(special);
+
+    }
+
+    private List<Item> getDatabase(DatabaseReference dataRef) {
+        final List<Item> dataList = new ArrayList<>();
+
+        dataRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    Item item = child.getValue(Item.class);
+                    dataList.add(item);
+                    /*Toast.makeText(getContext(), item.toString(), Toast.LENGTH_SHORT).show();
+                    Log.d("KEY", child.getKey());
+                    Log.d("Item", item.toString());*/
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.v(TAG, "loadPost:onCancelled", databaseError.toException());
+            }
+        });
+
+        return dataList;
     }
 }

@@ -1,21 +1,31 @@
 package icon.melb.melbicon;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
     private Context mContext;
     private List<Item> mData;
+    private RetrieveMenuTask retriever;
+    private Bitmap imageBitmap;
 
     public RecyclerViewAdapter(Context mContext, List<Item> mData) {
         this.mContext = mContext;
@@ -32,18 +42,21 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         View view;
         LayoutInflater mInflater = LayoutInflater.from(mContext);
         view = mInflater.inflate(R.layout.card_item, viewGroup, false);
-        Log.d("onCreateViewHolder","CreateViewHolder");
         return new MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder myViewHolder, int i) {
         Item current = mData.get(i);
-        myViewHolder.itemName.setText(current.getName());
+        myViewHolder.itemName.setText(current.getTitle());
         myViewHolder.itemDescription.setText(current.getDescription());
         myViewHolder.itemPrice.setText("" + current.getPrice());
-        myViewHolder.itemImage.setImageResource(current.getThumbnail());
-        Log.d("onBindViewHolder","BindViewHolder " + i);
+        try {
+            imageBitmap = getImageFromUrl(current.getImg_src());
+            myViewHolder.itemImage.setImageBitmap(imageBitmap);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -62,7 +75,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             itemName = (TextView) itemView.findViewById(R.id.itemName);
             itemDescription = (TextView) itemView.findViewById(R.id.itemDescription);
             itemPrice = (TextView) itemView.findViewById(R.id.itemPrice);
-            itemImage = (ImageView) itemView.findViewById(R.id.imageView);
+            itemImage = (ImageView) itemView.findViewById(R.id.itemImage);
 
             itemImage.setOnClickListener(this);
         }
@@ -71,6 +84,33 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public void onClick(View v) {
             //delete(getLayoutPosition());
             Toast.makeText(mContext, "Item clicked at " + getLayoutPosition(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private Bitmap getImageFromUrl(String img_src) throws Exception {
+        retriever = new RetrieveMenuTask();
+        return retriever.execute(img_src).get();
+    }
+
+    public class RetrieveMenuTask extends AsyncTask<String, Void, Bitmap> {
+        private Exception exception;
+        private Bitmap img;
+
+        @Override
+        protected Bitmap doInBackground(String... urls) {
+            try {
+
+                URL url = new URL(urls[0]);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                //connection.setDoInput(true);
+                connection.connect();
+                InputStream input = connection.getInputStream();
+                Bitmap myimg = BitmapFactory.decodeStream(input);
+                return myimg;
+            } catch (Exception e) {
+                this.exception = e;;
+            }
+            return null;
         }
     }
 }
