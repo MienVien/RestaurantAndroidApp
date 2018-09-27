@@ -28,7 +28,7 @@
             android:label="@string/title_activity_main">
         </activity>
         <activity
-            android:name=".StatusView"
+            android:name=".Status"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_status_view">
         </activity>

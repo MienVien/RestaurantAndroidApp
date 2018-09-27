@@ -3,24 +3,22 @@ package icon.melb.melbicon;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.ViewHolder>{
 
     private static final String TAG = "PaymentAdapter";
-    private ArrayList<PaymentOrders> mPaymentItem = new ArrayList<>();
+    private ArrayList<Item> mPaymentItem = new ArrayList<>();
     private Context mContext;
 
-    public PaymentAdapter(ArrayList<PaymentOrders> mPaymentItem, Context mContext) {
+    public PaymentAdapter(ArrayList<Item> mPaymentItem, Context mContext) {
         this.mPaymentItem = mPaymentItem;
         this.mContext = mContext;
     }
@@ -29,8 +27,8 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.ViewHold
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         Log.d(TAG, "onCreateViewHolder: entered");
-        //RESPONSIBLE FOR INFLATING THE 'payment_list.xml' VIEW
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.payment_list, viewGroup, false);
+        //RESPONSIBLE FOR INFLATING THE 'item_list.xmlIEW
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_list, viewGroup, false);
 
         //Custom Class outlined below
         ViewHolder holder = new ViewHolder(view);
