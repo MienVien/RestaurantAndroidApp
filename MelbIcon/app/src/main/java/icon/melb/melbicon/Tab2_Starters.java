@@ -46,7 +46,9 @@ public class Tab2_Starters extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.tab2__starters, container, false  );
 
-        operateDatabse();
+        Bundle args = getArguments();
+
+        lstItem = (List<Item>) args.getSerializable("StartersList");
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerview);
 
@@ -116,40 +118,5 @@ public class Tab2_Starters extends Fragment {
         mBuilder.setView(mView);
         AlertDialog dialog = mBuilder.create();
         dialog.show();
-    }
-
-    private void operateDatabse() {
-        mRef = FirebaseDatabase.getInstance().getReference("menu");
-        DatabaseReference menu = mRef.child("menu");
-        DatabaseReference special = menu.child("0").child("special");
-
-        lstItem = getDatabase(special);
-
-    }
-
-    private List<Item> getDatabase(DatabaseReference dataRef) {
-        final List<Item> dataList = new ArrayList<>();
-
-        dataRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    Item item = child.getValue(Item.class);
-                    dataList.add(item);
-                    /*Toast.makeText(getContext(), item.toString(), Toast.LENGTH_SHORT).show();
-                    Log.d("KEY", child.getKey());
-                    Log.d("Item", item.toString());*/
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.v(TAG, "loadPost:onCancelled", databaseError.toException());
-            }
-        });
-
-        return dataList;
     }
 }

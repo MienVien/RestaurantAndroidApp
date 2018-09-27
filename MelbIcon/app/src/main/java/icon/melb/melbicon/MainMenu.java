@@ -2,6 +2,9 @@ package icon.melb.melbicon;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -35,7 +38,10 @@ import com.google.firebase.database.ValueEventListener;
 
 import io.fabric.sdk.android.Fabric;
 
+import java.io.InputStream;
 import java.io.Serializable;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +55,10 @@ public class MainMenu extends AppCompatActivity {
     private TabLayout tabLayout;
     private List<Item> lstSpecial, lstStarter, lstMain, lstSide, lstDessert, lstDrinks;
     private DatabaseReference mRef;
-    private List<Order> order;
+    private RetrieveMenuTask retriever;
+
+    public static List<Order> orders = new ArrayList<>();
+    public static int currentOrder = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,10 +77,9 @@ public class MainMenu extends AppCompatActivity {
 
         operateDatabse();
 
-        order = new ArrayList<>();
-
         //Pass Order to other activities for use
-        passOrderToActivity(Tab1_Specials.class);
+        /*passOrderToActivity(RecyclerViewAdapter.class);
+        passOrderToActivity(Tab1_Specials.class);*/
 
         // Create the adapter that will return a fragment for each of the six
         // primary sections of the activity.
@@ -234,6 +242,11 @@ public class MainMenu extends AppCompatActivity {
 
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     Item item = child.getValue(Item.class);
+                    try {
+                        item.setImageBitmap(getImageFromUrl(item.getImg_src()));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     dataList.add(item);
                 }
 
@@ -249,8 +262,35 @@ public class MainMenu extends AppCompatActivity {
     }
 
     public void passOrderToActivity(Class targetActivity) {
-        Intent intent = new Intent(this, targetActivity);
-        intent.putExtra("Order", (Serializable) order);
+        Intent intent = new Intent(MainMenu.this, targetActivity);
+        intent.putExtra("orders", (Serializable) orders);
         //getIntent().getSerializableExtra("Order");
+    }
+
+    private Bitmap getImageFromUrl(String img_src) throws Exception {
+        retriever = new RetrieveMenuTask();
+        return retriever.execute(img_src).get();
+    }
+
+    public class RetrieveMenuTask extends AsyncTask<String, Void, Bitmap> {
+        private Exception exception;
+        private Bitmap img;
+
+        @Override
+        protected Bitmap doInBackground(String... urls) {
+            try {
+
+                URL url = new URL(urls[0]);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                //connection.setDoInput(true);
+                connection.connect();
+                InputStream input = connection.getInputStream();
+                Bitmap myimg = BitmapFactory.decodeStream(input);
+                return myimg;
+            } catch (Exception e) {
+                this.exception = e;;
+            }
+            return null;
+        }
     }
 }

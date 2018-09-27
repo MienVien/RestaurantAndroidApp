@@ -1,5 +1,7 @@
 package icon.melb.melbicon;
 
+import android.graphics.Bitmap;
+
 public class Item {
     private boolean available;
     private String title;
@@ -8,7 +10,7 @@ public class Item {
     private boolean vegetarian;
     private boolean glutenfree;
     private String img_src;
-    private int quantityOrdered;
+    private Bitmap imageBitmap;
 
     public Item () {
         this.title = "";
@@ -18,7 +20,6 @@ public class Item {
         this.glutenfree = false;
         this.img_src = "";
         this.available = false;
-        this.quantityOrdered = 1;
     }
 
     public Item(String title, String description, double price, boolean vegetarian, boolean glutenfree, String img_src, boolean available) {
@@ -29,7 +30,6 @@ public class Item {
         this.glutenfree = glutenfree;
         this.img_src = img_src;
         this.available = available;
-        this.quantityOrdered = 1;
     }
     
     public String getTitle() {
@@ -60,8 +60,8 @@ public class Item {
         return available;
     }
 
-    public int getQuantityOrdered() {
-        return quantityOrdered;
+    public Bitmap getImageBitmap() {
+        return imageBitmap;
     }
 
     public void setTitle(String title) {
@@ -92,8 +92,8 @@ public class Item {
         this.available = available;
     }
 
-    public void setQuantityOrdered(int quantity) {
-        this.quantityOrdered = quantity;
+    public void setImageBitmap(Bitmap imageBitmap) {
+        this.imageBitmap = imageBitmap;
     }
 
     public String toString() {
@@ -104,7 +104,6 @@ public class Item {
                 +"\nvegetarian: " + vegetarian
                 +"\nglutenfree: " + glutenfree
                 +"\nimg_src: " +img_src
-                +"\navailable: " + available
-                +"\nquantityOrdered: " + quantityOrdered;
+                +"\navailable: " + available;
     }
 }

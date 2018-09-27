@@ -12,6 +12,7 @@ public class Order {
     private String kitchenStatus;
     private String orderNotes;
     private List<Item> orderItemList;
+    private List<Integer> itemQuantityList;
 
     public Order() {
         this.dishQty = 1;
@@ -51,6 +52,12 @@ public class Order {
     public String getKitchenStatus() {
         return kitchenStatus;
     }
+    public List<Item> getOrderItemList() {
+        return orderItemList;
+    }
+    public List<Integer> getItemQuantityList() {
+        return itemQuantityList;
+    }
         
     public void changeCustomerStatus(String cutomerStatus){
     this.cutomerStatus = "COMPLETED";
@@ -63,5 +70,17 @@ public class Order {
         else{
             this.kitchenStatus = "COMPLETED";
         }
+    }
+
+    public void addToOrder(Item item) {
+        orderItemList.add(item);
+    }
+
+    public void addItemQuantity(int quantity) {
+        itemQuantityList.add(quantity);
+    }
+
+    public void updateItemQuantity(int position, int quantity) {
+        itemQuantityList.set(position, quantity);
     }
 }

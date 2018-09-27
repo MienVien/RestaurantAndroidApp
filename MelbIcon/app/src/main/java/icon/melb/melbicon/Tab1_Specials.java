@@ -27,6 +27,7 @@ import static android.content.ContentValues.TAG;
 
 public class Tab1_Specials extends Fragment {
     List<Item> lstItem;
+    List<Order> orders;
 
     RecyclerView mRecyclerView;
     GridLayoutManager mGridLayout;
@@ -101,10 +102,13 @@ public class Tab1_Specials extends Fragment {
         ImageButton backBtn = (ImageButton) mView.findViewById(R.id.backBtn);
         ImageButton submitBtn = (ImageButton) mView.findViewById(R.id.submitBtn);
 
+        mBuilder.setView(mView);
+        final AlertDialog dialog = mBuilder.create();
+
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "Go back", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
             }
         });
 
@@ -114,9 +118,6 @@ public class Tab1_Specials extends Fragment {
                 Toast.makeText(getContext(), "Submit Order", Toast.LENGTH_SHORT).show();
             }
         });
-
-        mBuilder.setView(mView);
-        AlertDialog dialog = mBuilder.create();
         dialog.show();
     }
 }
