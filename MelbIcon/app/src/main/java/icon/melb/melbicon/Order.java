@@ -11,8 +11,7 @@ public class Order {
     private String cutomerStatus;
     private String kitchenStatus;
     private String orderNotes;
-    private List<Item> orderItemList;
-    private List<Integer> itemQuantityList;
+    private List<OrderItem> orderItemList;
 
     public Order() {
         this.dishQty = 1;
@@ -23,14 +22,14 @@ public class Order {
         kitchenStatus = "IN PROGRESS";
     }
 
-    public Order(int dishQty, List<Item> orderItemList){
+    public Order(int dishQty, List<MenuItem> orderMenuItemList){
         this.dishQty = dishQty; //Total Items ordered per Table
         this.orderDateTime = Calendar.getInstance().getTime();
         this.orderItemList = orderItemList;
         cutomerStatus = "IN PROGRESS";
         kitchenStatus = "RECEIVED";
     }
-    public Order(int dishQty, String orderNotes, List<Item> orderItemList){
+    public Order(int dishQty, String orderNotes, List<MenuItem> orderMenuItemList){
         this.dishQty = dishQty; //Total Items ordered per Table
         this.orderDateTime = Calendar.getInstance().getTime();
         this.orderItemList = orderItemList;
@@ -38,7 +37,6 @@ public class Order {
         cutomerStatus = "IN PROGRESS";
         kitchenStatus = "RECEIVED";
     }
-
 
     public int getDishQty(){
         return dishQty;
@@ -52,13 +50,17 @@ public class Order {
     public String getKitchenStatus() {
         return kitchenStatus;
     }
-    public List<Item> getOrderItemList() {
+    public List<OrderItem> getOrderItemList() {
         return orderItemList;
     }
-    public List<Integer> getItemQuantityList() {
-        return itemQuantityList;
+    public double getTotalPriceOrder() {
+        double total = 0;
+        for (OrderItem orderItem:orderItemList) {
+            total += orderItem.getTotal();
+        }
+        return total;
     }
-        
+
     public void changeCustomerStatus(String cutomerStatus){
     this.cutomerStatus = "COMPLETED";
     }
@@ -72,15 +74,7 @@ public class Order {
         }
     }
 
-    public void addToOrder(Item item) {
-        orderItemList.add(item);
-    }
-
-    public void addItemQuantity(int quantity) {
-        itemQuantityList.add(quantity);
-    }
-
-    public void updateItemQuantity(int position, int quantity) {
-        itemQuantityList.set(position, quantity);
+    public void addToOrder(OrderItem orderItem) {
+        orderItemList.add(orderItem);
     }
 }

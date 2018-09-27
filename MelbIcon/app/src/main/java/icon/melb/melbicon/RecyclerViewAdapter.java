@@ -3,9 +3,6 @@ package icon.melb.melbicon;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,26 +10,26 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
     private Context mContext;
-    private List<Item> mData;
+    private List<MenuItem> mData;
     private Bitmap imageBitmap;
-    private Order order = MainMenu.orders.get(MainMenu.currentOrder);
+    private Order order = MainMenu.currentOrder;
 
-    public RecyclerViewAdapter(Context mContext, List<Item> mData) {
+    public RecyclerViewAdapter(Context mContext, List<MenuItem> mData) {
         this.mContext = mContext;
         this.mData = mData;
     }
@@ -47,10 +44,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(MyViewHolder myViewHolder, int i) {
-        Item current = mData.get(i);
+        MenuItem current = mData.get(i);
         myViewHolder.itemName.setText(current.getTitle());
         myViewHolder.itemDescription.setText(current.getDescription());
-        myViewHolder.itemPrice.setText("" + current.getPrice());
+        myViewHolder.itemPrice.setText("$" + current.getPrice());
         myViewHolder.itemImage.setImageBitmap(current.getImageBitmap());
     }
 
@@ -77,7 +74,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         @Override
         public void onClick(View v) {
-            final Item item = mData.get(getLayoutPosition());
+            final MenuItem menuItem = mData.get(getLayoutPosition());
             View view;
 
             AlertDialog.Builder mBuilder = new AlertDialog.Builder(mContext);
@@ -86,15 +83,37 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
             view = mInflater.inflate(R.layout.item_onclick_dialog, null);
 
-            TextView title = (TextView) view.findViewById(R.id.titleTextView);
-            title.setText(item.getTitle());
+            final TextView title = (TextView) view.findViewById(R.id.titleTextView);
+            title.setText(menuItem.getTitle());
+
+            final List<String> selectedIngredients = new ArrayList<>();
+            final String[] ingredients = itemDescription.getText().toString().split(",");
+            for (String s:ingredients) {
+                selectedIngredients.add(s.trim());
+            }
+            final ListView ingredientsListView = (ListView) view.findViewById(R.id.ingredientListView);
+            ingredientsListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+            final ArrayAdapter<String> adapter = new ArrayAdapter<String>(mContext, R.layout.ingredient, R.id.checkText, ingredients);
+            ingredientsListView.setAdapter(adapter);
+            ingredientsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    String selected = ((TextView)view.findViewById(R.id.checkText)).getText().toString().trim();
+                    if (selectedIngredients.contains(selected)) {
+                        selectedIngredients.remove(selected);
+                    }
+                    else {
+                        selectedIngredients.add(selected);
+                    }
+                }
+            });
 
             ImageButton backBtn = (ImageButton) view.findViewById(R.id.backBtn);
 
-            final TextView amount = (TextView) view.findViewById(R.id.amountTextView);
+            final TextView quantity = (TextView) view.findViewById(R.id.amountTextView);
             final TextView priceTextView = (TextView) view.findViewById(R.id.priceTextView);
-            priceTextView.setText("$" + item.getPrice() + " * " + amount.getText() + " = $" + item.getPrice()*Integer.parseInt(amount.getText().toString()));
-            amount.addTextChangedListener(new TextWatcher() {
+            priceTextView.setText("$" + menuItem.getPrice() + " * " + quantity.getText() + " = $" + menuItem.getPrice()*Integer.parseInt(quantity.getText().toString()));
+            quantity.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -102,7 +121,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    priceTextView.setText("$" + item.getPrice() + " * " + amount.getText() + " = $" + item.getPrice()*Integer.parseInt(amount.getText().toString()));
+                    priceTextView.setText("$" + menuItem.getPrice() + " * " + quantity.getText() + " = $" + menuItem.getPrice()*Integer.parseInt(quantity.getText().toString()));
                 }
 
                 @Override
@@ -115,11 +134,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             decreaseBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int quantityOrdered = order.getItemQuantityList();
-                    if (quantityOrdered > 1) {
-                        quantityOrdered--;
-                        item.setQuantityOrdered(quantityOrdered);
-                        amount.setText(Integer.toString(quantityOrdered));
+                    int qty = Integer.parseInt(quantity.getText().toString());
+                    if (qty > 1) {
+                        qty--;
+                        quantity.setText(Integer.toString(qty));
                     }
                 }
             });
@@ -127,22 +145,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             increaseBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int quantityOrdered = item.getQuantityOrdered();
-                    quantityOrdered++;
-                    item.setQuantityOrdered(quantityOrdered);
-                    amount.setText(Integer.toString(quantityOrdered));
+                    int qty = Integer.parseInt(quantity.getText().toString());
+                        qty++;
+                        quantity.setText(Integer.toString(qty));
+                        Log.d("count",Integer.toString(qty));
                 }
             });
 
             EditText note = (EditText) view.findViewById(R.id.addNotes);
 
             Button addToOrderBtn = (Button) view.findViewById(R.id.addBtn);
-            addToOrderBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    order.addToOrder(item);
-                }
-            });
+
 
             mBuilder.setView(view);
 
@@ -155,9 +168,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 }
             });
 
+            addToOrderBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int qty = Integer.parseInt(quantity.getText().toString());
+                    OrderItem orderItem = new OrderItem(menuItem.getTitle(), menuItem.getPrice(), qty);
+                    order.addToOrder(orderItem);
+                    dialog.dismiss();
+                    Log.d("Current Order", String.valueOf(order.getOrderItemList().size()));
+                }
+            });
+
             dialog.show();
 
-            //Toast.makeText(mContext, "Item clicked at " + getLayoutPosition(), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(mContext, "MenuItem clicked at " + getLayoutPosition(), Toast.LENGTH_SHORT).show();
         }
     }
 }

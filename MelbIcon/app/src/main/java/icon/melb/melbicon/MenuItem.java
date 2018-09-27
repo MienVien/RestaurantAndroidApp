@@ -2,7 +2,7 @@ package icon.melb.melbicon;
 
 import android.graphics.Bitmap;
 
-public class Item {
+public class MenuItem {
     private boolean available;
     private String title;
     private String description;
@@ -12,7 +12,7 @@ public class Item {
     private String img_src;
     private Bitmap imageBitmap;
 
-    public Item () {
+    public MenuItem() {
         this.title = "";
         this.description = "";
         this.price = 0;
@@ -22,7 +22,7 @@ public class Item {
         this.available = false;
     }
 
-    public Item(String title, String description, double price, boolean vegetarian, boolean glutenfree, String img_src, boolean available) {
+    public MenuItem(String title, String description, double price, boolean vegetarian, boolean glutenfree, String img_src, boolean available) {
         this.title = title;
         this.description = description;
         this.price = price;

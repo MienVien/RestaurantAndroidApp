@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/titleTextView"
-        android:layout_width="387dp"
+        android:layout_width="325dp"
         android:layout_height="71dp"
         android:layout_alignBottom="@+id/divider2"
         android:layout_alignParentStart="true"
@@ -32,13 +32,12 @@
         tools:layout_editor_absoluteY="84dp" />
 
     <ListView
-        android:layout_width="wrap_content"
+        android:id="@+id/ingredientListView"
+        android:layout_width="match_parent"
         android:layout_height="640dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="86dp">
-
-    </ListView>
+        android:layout_marginTop="86dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -71,7 +70,7 @@
 
             <Button
                 android:id="@+id/decreaseBtn"
-                android:layout_width="70dp"
+                android:layout_width="80dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="-"
@@ -92,7 +91,7 @@
 
             <Button
                 android:id="@+id/increaseBtn"
-                android:layout_width="70dp"
+                android:layout_width="80dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="+"
@@ -123,8 +122,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="12dp"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Add Notes..." />
+        android:hint="Add Notes..."
+        android:inputType="textPersonName" />
 
     <TextView
         android:id="@+id/priceTextView"

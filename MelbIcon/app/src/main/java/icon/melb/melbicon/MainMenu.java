@@ -1,16 +1,16 @@
 package icon.melb.melbicon;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -20,15 +20,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-
-import android.widget.GridLayout;
-import android.widget.GridView;
+import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.baoyz.swipemenulistview.SwipeMenu;
+import com.baoyz.swipemenulistview.SwipeMenuCreator;
+import com.baoyz.swipemenulistview.SwipeMenuItem;
+import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.crashlytics.android.Crashlytics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -53,12 +53,13 @@ public class MainMenu extends AppCompatActivity {
 
     private ViewPager mViewPager;
     private TabLayout tabLayout;
-    private List<Item> lstSpecial, lstStarter, lstMain, lstSide, lstDessert, lstDrinks;
+    private List<MenuItem> lstSpecial, lstStarter, lstMain, lstSide, lstDessert, lstDrinks;
     private DatabaseReference mRef;
     private RetrieveMenuTask retriever;
 
     public static List<Order> orders = new ArrayList<>();
-    public static int currentOrder = 0;
+    public static Order currentOrder = new Order();
+    public static int currentOrderPos = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +102,10 @@ public class MainMenu extends AppCompatActivity {
 
     }
 
+    public static void newOrder() {
+        currentOrder = new Order();
+    }
+
     private void setupTabIcons() {
         View view0 = getLayoutInflater().inflate(R.layout.customtab, null);
         view0.setBackgroundResource(R.mipmap.specialsicons);
@@ -135,18 +140,18 @@ public class MainMenu extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
+    public boolean onOptionsItemSelected(android.view.MenuItem menuItem) {
+        // Handle action bar menuItem clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        int id = menuItem.getItemId();
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
 
-        return super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(menuItem);
     }
 
 
@@ -233,21 +238,21 @@ public class MainMenu extends AppCompatActivity {
         lstDrinks = getDatabase(drinks);
     }
 
-    private List<Item> getDatabase(DatabaseReference dataRef) {
-        final List<Item> dataList = new ArrayList<>();
+    private List<MenuItem> getDatabase(DatabaseReference dataRef) {
+        final List<MenuItem> dataList = new ArrayList<>();
 
         dataRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    Item item = child.getValue(Item.class);
+                    MenuItem menuItem = child.getValue(MenuItem.class);
                     try {
-                        item.setImageBitmap(getImageFromUrl(item.getImg_src()));
+                        menuItem.setImageBitmap(getImageFromUrl(menuItem.getImg_src()));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    dataList.add(item);
+                    dataList.add(menuItem);
                 }
 
             }
