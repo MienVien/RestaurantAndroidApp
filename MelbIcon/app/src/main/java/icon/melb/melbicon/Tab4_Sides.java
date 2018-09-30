@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
-public class Tab4_Sides extends Fragment {
+public class Tab4_Sides extends Fragment  {
     List<MenuItem> lstMenuItem;
 
     RecyclerView mRecyclerView;

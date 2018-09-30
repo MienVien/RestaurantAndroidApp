@@ -2,7 +2,9 @@ package icon.melb.melbicon;
 
 import android.graphics.Bitmap;
 
-public class MenuItem {
+import java.io.Serializable;
+
+public class MenuItem implements Serializable{
     private boolean available;
     private String title;
     private String description;

@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
-public class Tab1_Specials extends Fragment {
+public class Tab1_Specials extends Fragment  {
     List<MenuItem> lstMenuItem;
     List<Order> orders;
 

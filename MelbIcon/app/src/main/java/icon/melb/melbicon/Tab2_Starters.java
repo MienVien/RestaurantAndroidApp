@@ -24,7 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 
 import java.util.List;
 
-public class Tab2_Starters extends Fragment {
+public class Tab2_Starters extends Fragment  {
     List<MenuItem> lstMenuItem;
 
     RecyclerView mRecyclerView;

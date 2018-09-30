@@ -1,5 +1,6 @@
 package icon.melb.melbicon;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -72,7 +73,6 @@ public class MainMenu extends AppCompatActivity {
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main_menu);
 
-
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
         lstSpecial = new ArrayList<>();
@@ -104,8 +104,8 @@ public class MainMenu extends AppCompatActivity {
         View headerView = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE))
                 .inflate(R.layout.customtab, null, false);
 
-        setButtonAction();
         setupTabIcons();
+        setButtonAction();
 
     }
 
@@ -143,7 +143,7 @@ public class MainMenu extends AppCompatActivity {
 
                 dialog.show();
 
-                //stopButton = mView.findViewById(R.id.stopButton);
+                stopButton = mView.findViewById(R.id.stopButton);
 
                 stopButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -227,6 +227,8 @@ public class MainMenu extends AppCompatActivity {
                 MainMenu.orders.add(MainMenu.currentOrder);
                 MainMenu.newOrder();
                 dialog.dismiss();
+                Intent navigate = new Intent(MainMenu.this, MainActivity.class);
+                startActivity(navigate);
                 Log.d("Submit Order", "Submitted Order");
                 Log.d("Size", Integer.toString(MainMenu.orders.size()));
                 Log.d("Test Details", MainMenu.orders.get(0).getOrderItemList().get(0).getTitle());
@@ -388,7 +390,6 @@ public class MainMenu extends AppCompatActivity {
                     }
                     dataList.add(menuItem);
                 }
-
             }
 
             @Override
@@ -396,15 +397,14 @@ public class MainMenu extends AppCompatActivity {
                 Log.v(TAG, "loadPost:onCancelled", databaseError.toException());
             }
         });
-
         return dataList;
     }
 
-    public void passOrderToActivity(Class targetActivity) {
-        Intent intent = new Intent(MainMenu.this, targetActivity);
-        intent.putExtra("orders", (Serializable) orders);
-        //getIntent().getSerializableExtra("Order");
-    }
+//    public void passOrderToActivity(Class targetActivity) {
+//        Intent intent = new Intent(MainMenu.this, targetActivity);
+//        intent.putExtra("orders", (Serializable) orders);
+//        //getIntent().getSerializableExtra("Order");
+//    }
 
     private Bitmap getImageFromUrl(String img_src) throws Exception {
         retriever = new RetrieveMenuTask();
@@ -418,15 +418,15 @@ public class MainMenu extends AppCompatActivity {
         @Override
         protected Bitmap doInBackground(String... urls) {
             try {
-
-                URL url = new URL(urls[0]);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                //connection.setDoInput(true);
-                connection.connect();
-                InputStream input = connection.getInputStream();
-                Bitmap myimg = BitmapFactory.decodeStream(input);
-                return myimg;
-            } catch (Exception e) {
+                    URL url = new URL(urls[0]);
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    //connection.setDoInput(true);
+                    connection.connect();
+                    InputStream input = connection.getInputStream();
+                    Bitmap myimg = BitmapFactory.decodeStream(input);
+                    return myimg;
+            }
+            catch (Exception e) {
                 this.exception = e;;
             }
             return null;

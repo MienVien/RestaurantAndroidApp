@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
-public class Tab3_Mains extends Fragment {
+public class Tab3_Mains extends Fragment  {
     List<MenuItem> lstMenuItem;
 
     RecyclerView mRecyclerView;
