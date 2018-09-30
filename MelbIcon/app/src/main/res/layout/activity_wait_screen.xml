@@ -30,7 +30,7 @@
             android:scaleType="fitCenter"
             android:paddingHorizontal="15px"
             android:contentDescription="@string/orderMore"
-            android:src="@mipmap/ordermoreicon" />
+            android:src="@mipmap/ordermore" />
 
         <ImageButton
             android:id="@+id/checkstatus"
@@ -41,7 +41,7 @@
             android:scaleType="fitCenter"
             android:paddingHorizontal="15px"
             android:contentDescription="@string/checkStatus"
-            android:src="@mipmap/checkstatusicon" />
+            android:src="@mipmap/checkstatus" />
 
         <ImageButton
             android:id="@+id/reqassistance"
@@ -52,7 +52,7 @@
             android:contentDescription="@string/requestAssistance"
             android:scaleType="fitCenter"
             android:paddingHorizontal="15px"
-            android:src="@mipmap/requestassistanceicon" />
+            android:src="@mipmap/requestassistance" />
 
 
         <ImageButton
@@ -65,7 +65,7 @@
             android:scaleType="fitCenter"
             android:paddingHorizontal="15px"
             android:contentDescription="@string/finaliseBill"
-            android:src="@mipmap/paybillicon" />
+            android:src="@mipmap/paybill" />
 
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
