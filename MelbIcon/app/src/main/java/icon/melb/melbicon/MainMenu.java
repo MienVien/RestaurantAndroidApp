@@ -49,6 +49,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.content.ContentValues.TAG;
+import static java.lang.System.out;
 
 public class MainMenu extends AppCompatActivity {
 
@@ -82,7 +83,7 @@ public class MainMenu extends AppCompatActivity {
         lstDessert = new ArrayList<>();
         lstDrinks = new ArrayList<>();
 
-        operateDatabse();
+      //  operateDatabse();
 
         //Pass Order to other activities for use
         /*passOrderToActivity(RecyclerViewAdapter.class);
@@ -424,6 +425,7 @@ public class MainMenu extends AppCompatActivity {
                     connection.connect();
                     InputStream input = connection.getInputStream();
                     Bitmap myimg = BitmapFactory.decodeStream(input);
+                   // myimg.compress(Bitmap.CompressFormat.PNG,90, out); //MAY NOT BE NECESSARY
                     return myimg;
             }
             catch (Exception e) {
