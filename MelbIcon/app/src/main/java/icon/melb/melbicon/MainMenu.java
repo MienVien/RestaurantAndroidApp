@@ -22,8 +22,10 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
@@ -56,16 +58,20 @@ public class MainMenu extends AppCompatActivity {
     private List<MenuItem> lstSpecial, lstStarter, lstMain, lstSide, lstDessert, lstDrinks;
     private DatabaseReference mRef;
     private RetrieveMenuTask retriever;
+    private ImageButton homeBtn, viewOrderBtn, assistantBtn;
+    private Button stopButton;
 
     public static List<Order> orders = new ArrayList<>();
     public static Order currentOrder = new Order();
     public static int currentOrderPos = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main_menu);
+
 
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
@@ -98,8 +104,136 @@ public class MainMenu extends AppCompatActivity {
         View headerView = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE))
                 .inflate(R.layout.customtab, null, false);
 
+        setButtonAction();
         setupTabIcons();
 
+    }
+
+    private void setButtonAction() {
+
+        homeBtn = (ImageButton) findViewById(R.id.homeButton);
+        viewOrderBtn = (ImageButton) findViewById(R.id.viewOrderButton);
+        assistantBtn = (ImageButton) findViewById(R.id.assistantButton);
+
+        homeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Toast.makeText(getContext(), "Go back home", Toast.LENGTH_SHORT).show();
+                Intent navigate = new Intent(MainMenu.this, MainActivity.class);
+                startActivity(navigate);
+            }
+        });
+
+        viewOrderBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //                Toast.makeText(getContext(), "Go to view order", Toast.LENGTH_SHORT).show();
+                viewOrder();
+            }
+        });
+
+        assistantBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainMenu.this);
+                View mView = getLayoutInflater().inflate(R.layout.request_assistance_overlay, null);
+
+                mBuilder.setView(mView);
+                final AlertDialog dialog = mBuilder.create();
+
+                dialog.show();
+
+                //stopButton = mView.findViewById(R.id.stopButton);
+
+                stopButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.cancel();
+                    }
+                });
+                // Toast.makeText(getContext(), "Ask for assistance", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void viewOrder() {
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainMenu.this);
+        View mView = getLayoutInflater().inflate(R.layout.view_order_dialog, null);
+        ImageButton backBtn = (ImageButton) mView.findViewById(R.id.backBtn);
+        ImageButton submitBtn = (ImageButton) mView.findViewById(R.id.submitBtn);
+        final SwipeMenuListView listView = (SwipeMenuListView) mView.findViewById(R.id.listView);
+        final TextView totalPrice = (TextView) mView.findViewById(R.id.totalPrice);
+
+        final ArrayAdapter adapter = new ArrayAdapter(MainMenu.this, android.R.layout.simple_list_item_1,  MainMenu.currentOrder.getOrderItemList());
+        listView.setAdapter(adapter);
+
+        SwipeMenuCreator creator = new SwipeMenuCreator() {
+
+            @Override
+            public void create(SwipeMenu menu) {
+                // create "open" item
+                SwipeMenuItem openItem = new SwipeMenuItem(
+                        MainMenu.this);
+
+                // create "delete" item
+                SwipeMenuItem deleteItem = new SwipeMenuItem(
+                        MainMenu.this);
+                // set item background
+                deleteItem.setBackground(new ColorDrawable(Color.rgb(0xF9,
+                        0x3F, 0x25)));
+                // set item width
+                deleteItem.setWidth(170);
+                // set a icon
+                deleteItem.setIcon(R.drawable.ic_action_name);
+                // add to menu
+                menu.addMenuItem(deleteItem);
+            }
+        };
+
+        // set creator
+        listView.setMenuCreator(creator);
+
+        listView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
+                switch (index) {
+                    case 0:
+                        MainMenu.currentOrder.getOrderItemList().remove(index);
+                        listView.setAdapter(adapter);
+                        totalPrice.setText("$" + MainMenu.currentOrder.getTotalPriceOrder());
+                        Log.d("Delete", "Delete");
+                        break;
+                }
+                // false : close the menu; true : not close the menu
+                return false;
+            }
+        });
+
+        totalPrice.setText("$" + MainMenu.currentOrder.getTotalPriceOrder());
+
+        mBuilder.setView(mView);
+        final AlertDialog dialog = mBuilder.create();
+
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        submitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainMenu.orders.add(MainMenu.currentOrder);
+                MainMenu.newOrder();
+                dialog.dismiss();
+                Log.d("Submit Order", "Submitted Order");
+                Log.d("Size", Integer.toString(MainMenu.orders.size()));
+                Log.d("Test Details", MainMenu.orders.get(0).getOrderItemList().get(0).getTitle());
+            }
+        });
+
+        dialog.show();
     }
 
     public static void newOrder() {
@@ -112,7 +246,7 @@ public class MainMenu extends AppCompatActivity {
         tabLayout.getTabAt(0).setCustomView(view0);
 
         View view1 = getLayoutInflater().inflate(R.layout.customtab, null);
-        view1.setBackgroundResource(R.mipmap.specialsicons); //starters
+        view1.setBackgroundResource(R.mipmap.startersicon); //starters
         tabLayout.getTabAt(1).setCustomView(view1);
 
         View view2 = getLayoutInflater().inflate(R.layout.customtab, null);
@@ -124,7 +258,7 @@ public class MainMenu extends AppCompatActivity {
         tabLayout.getTabAt(3).setCustomView(view3);
 
         View view4 = getLayoutInflater().inflate(R.layout.customtab, null);
-        view4.setBackgroundResource(R.mipmap.specialsicons); //dessert
+        view4.setBackgroundResource(R.mipmap.dessertsicon2); //dessert
         tabLayout.getTabAt(4).setCustomView(view4);
 
         View view5 = getLayoutInflater().inflate(R.layout.customtab, null);

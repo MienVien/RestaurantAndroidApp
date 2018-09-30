@@ -51,11 +51,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         myViewHolder.itemImage.setImageBitmap(current.getImageBitmap());
     }
 
-
     @Override
     public int getItemCount() {
         return mData.size();
     }
+
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView itemName, itemDescription, itemPrice;
@@ -78,9 +78,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             View view;
 
             AlertDialog.Builder mBuilder = new AlertDialog.Builder(mContext);
-
             LayoutInflater mInflater = LayoutInflater.from(mContext);
-
             view = mInflater.inflate(R.layout.item_onclick_dialog, null);
 
             final TextView title = (TextView) view.findViewById(R.id.titleTextView);
@@ -88,11 +86,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
             final List<String> selectedIngredients = new ArrayList<>();
             final String[] ingredients = itemDescription.getText().toString().split(",");
+
             for (String s:ingredients) {
                 selectedIngredients.add(s.trim());
             }
+
             final ListView ingredientsListView = (ListView) view.findViewById(R.id.ingredientListView);
             ingredientsListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
             final ArrayAdapter<String> adapter = new ArrayAdapter<String>(mContext, R.layout.ingredient, R.id.checkText, ingredients);
             ingredientsListView.setAdapter(adapter);
             ingredientsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -113,6 +114,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             final TextView quantity = (TextView) view.findViewById(R.id.amountTextView);
             final TextView priceTextView = (TextView) view.findViewById(R.id.priceTextView);
             priceTextView.setText("$" + menuItem.getPrice() + " * " + quantity.getText() + " = $" + menuItem.getPrice()*Integer.parseInt(quantity.getText().toString()));
+
             quantity.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -155,7 +157,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             EditText note = (EditText) view.findViewById(R.id.addNotes);
 
             Button addToOrderBtn = (Button) view.findViewById(R.id.addBtn);
-
 
             mBuilder.setView(view);
 
