@@ -26,7 +26,7 @@ import java.util.List;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
     private Context mContext;
     private List<MenuItem> mData;
-    private Bitmap imageBitmap;
+    private transient Bitmap imageBitmap;
     private Order order = MainMenu.currentOrder;
 
     public RecyclerViewAdapter(Context mContext, List<MenuItem> mData) {

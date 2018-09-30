@@ -14,7 +14,7 @@ public class MenuItem implements Serializable{
     private boolean vegetarian;
     private boolean glutenfree;
     private String img_src;
-    private Bitmap imageBitmap;
+    private transient Bitmap imageBitmap;
 
 
     public MenuItem() {

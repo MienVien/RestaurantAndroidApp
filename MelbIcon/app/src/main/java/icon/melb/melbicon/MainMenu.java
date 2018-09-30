@@ -41,6 +41,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import io.fabric.sdk.android.Fabric;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.net.HttpURLConnection;
@@ -74,7 +75,7 @@ public class MainMenu extends AppCompatActivity {
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main_menu);
 
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        Utils.getDatabase();
 
         lstSpecial = new ArrayList<>();
         lstStarter = new ArrayList<>();
@@ -83,7 +84,7 @@ public class MainMenu extends AppCompatActivity {
         lstDessert = new ArrayList<>();
         lstDrinks = new ArrayList<>();
 
-      //  operateDatabse();
+        operateDatabse();
 
         //Pass Order to other activities for use
         /*passOrderToActivity(RecyclerViewAdapter.class);
@@ -418,7 +419,7 @@ public class MainMenu extends AppCompatActivity {
 
     public class RetrieveMenuTask extends AsyncTask<String, Void, Bitmap> {
         private Exception exception;
-        private Bitmap img;
+        private transient Bitmap img;
 
         @Override
         protected Bitmap doInBackground(String... urls) {
@@ -430,6 +431,8 @@ public class MainMenu extends AppCompatActivity {
                     InputStream input = connection.getInputStream();
                     Bitmap myimg = BitmapFactory.decodeStream(input);
                    // myimg.compress(Bitmap.CompressFormat.PNG,90, out); //MAY NOT BE NECESSARY
+                     ByteArrayOutputStream out = new ByteArrayOutputStream();
+                     myimg.compress(Bitmap.CompressFormat.PNG, 90, out);
                     return myimg;
             }
             catch (Exception e) {
