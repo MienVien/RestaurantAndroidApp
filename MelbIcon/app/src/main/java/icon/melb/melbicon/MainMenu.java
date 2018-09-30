@@ -120,7 +120,7 @@ public class MainMenu extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Toast.makeText(getContext(), "Go back home", Toast.LENGTH_SHORT).show();
-                Intent navigate = new Intent(MainMenu.this, MainActivity.class);
+                Intent navigate = new Intent(MainMenu.this, WaitScreen.class);
                 startActivity(navigate);
             }
         });
@@ -227,12 +227,16 @@ public class MainMenu extends AppCompatActivity {
             public void onClick(View v) {
                 MainMenu.orders.add(MainMenu.currentOrder);
                 MainMenu.newOrder();
+
+                Intent navigate = new Intent(MainMenu.this, WaitScreen.class);
+
                 dialog.dismiss();
-                Intent navigate = new Intent(MainMenu.this, MainActivity.class);
+
                 startActivity(navigate);
-                Log.d("Submit Order", "Submitted Order");
-                Log.d("Size", Integer.toString(MainMenu.orders.size()));
-                Log.d("Test Details", MainMenu.orders.get(0).getOrderItemList().get(0).getTitle());
+
+//                Log.d("Submit Order", "Submitted Order");
+//                Log.d("Size", Integer.toString(MainMenu.orders.size()));
+//                Log.d("Test Details", MainMenu.orders.get(0).getOrderItemList().get(0).getTitle());
             }
         });
 

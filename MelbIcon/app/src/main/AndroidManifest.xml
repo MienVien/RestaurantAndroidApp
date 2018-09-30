@@ -24,10 +24,29 @@
             android:name=".MainMenu"
             android:label="@string/title_activity_main_menu"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme">
+        </activity>
+        <activity
+            android:name=".WaitScreen"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_wait_screen">
+        </activity>
+        <activity
+            android:name=".Payment"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_payment">
+        </activity>
+        <activity
+            android:name=".Status"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_status_view">
+        </activity>
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="ef0846c52627634c8fb82f063e57e8f2ff05fb36" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

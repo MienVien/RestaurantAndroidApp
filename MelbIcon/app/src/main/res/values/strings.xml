@@ -16,4 +16,14 @@
     <string name="checkStatus" />
     <string name="requestAssistance" />
     <string name="finaliseBill" />
+    <string name="title_activity_wait_screen" />
+    <string name="andrpay" />
+    <string name="paypal" />
+    <string name="visa" />
+    <string name="cash" />
+    <string name="backButton" />
+    <string name="title_activity_payment" />
+    <string name="table" />
+    <string name="back_button" />
+    <string name="title_activity_status_view" />
 </resources>
