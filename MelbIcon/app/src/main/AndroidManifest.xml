@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="icon.melb.melbicon">
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
         android:allowBackup="true"
         android:screenOrientation="landscape"
@@ -41,6 +41,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_status_view">
         </activity>
+        <activity android:name=".PaymentDetails"></activity>
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="ef0846c52627634c8fb82f063e57e8f2ff05fb36" />
