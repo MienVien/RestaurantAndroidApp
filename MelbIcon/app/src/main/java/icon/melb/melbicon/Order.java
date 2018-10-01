@@ -10,30 +10,20 @@ public class Order {
     private Date orderDateTime;
     private String cutomerStatus;
     private String kitchenStatus;
-    private String orderNotes;
-    private List<OrderItem> orderItemList;
+    private List<OrderItem> combinedOrderItemList;
 
     public Order() {
         this.dishQty = 1;
         this.orderDateTime = Calendar.getInstance().getTime();
-        orderItemList = new ArrayList<>();
-        orderNotes = "";
+        combinedOrderItemList = new ArrayList<>();
         cutomerStatus = "IN PROGRESS";
-        kitchenStatus = "IN PROGRESS";
+        kitchenStatus = "IN RECEIVED";
     }
 
-    public Order(int dishQty, List<MenuItem> orderMenuItemList){
-        this.dishQty = dishQty; //Total Items ordered per Table
+    public Order(int dishQty, List<OrderItem> orderMenuItemList){
+        //this.dishQty = dishQty; //Total Items ordered per Table
         this.orderDateTime = Calendar.getInstance().getTime();
-        this.orderItemList = orderItemList;
-        cutomerStatus = "IN PROGRESS";
-        kitchenStatus = "RECEIVED";
-    }
-    public Order(int dishQty, String orderNotes, List<MenuItem> orderMenuItemList){
-        this.dishQty = dishQty; //Total Items ordered per Table
-        this.orderDateTime = Calendar.getInstance().getTime();
-        this.orderItemList = orderItemList;
-        this.orderNotes = orderNotes;
+        this.combinedOrderItemList = combinedOrderItemList;
         cutomerStatus = "IN PROGRESS";
         kitchenStatus = "RECEIVED";
     }
@@ -51,11 +41,16 @@ public class Order {
         return kitchenStatus;
     }
     public List<OrderItem> getOrderItemList() {
-        return orderItemList;
+        return combinedOrderItemList;
     }
+    public void addToOrderItemList(OrderItem orderItem) {
+        combinedOrderItemList.add(orderItem);
+    }
+
     public double getTotalPriceOrder() {
         double total = 0;
-        for (OrderItem orderItem:orderItemList) {
+
+        for (OrderItem orderItem:combinedOrderItemList) {
             total += orderItem.getTotal();
         }
         return total;
@@ -74,7 +69,6 @@ public class Order {
         }
     }
 
-    public void addToOrder(OrderItem orderItem) {
-        orderItemList.add(orderItem);
-    }
+
+
 }

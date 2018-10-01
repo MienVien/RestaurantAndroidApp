@@ -12,14 +12,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.ViewHolder>{
 
     private static final String TAG = "PaymentAdapter";
-    private ArrayList<MenuItem> mPaymentItem = new ArrayList<>();
+    private List<OrderItem> mPaymentItem = new ArrayList<>();
     private Context mContext;
 
-    public PaymentAdapter(ArrayList<MenuItem> mPaymentItem, Context mContext) {
+    public PaymentAdapter(List<OrderItem> mPaymentItem, Context mContext) {
         this.mPaymentItem = mPaymentItem;
         this.mContext = mContext;
     }

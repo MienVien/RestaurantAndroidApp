@@ -12,14 +12,17 @@ import android.widget.ImageButton;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static android.content.ContentValues.TAG;
 
 public class Status extends Activity {
 
     private ImageButton backButton;
-    private ArrayList<Order> mOrderList = new ArrayList<>();
-    private ArrayList<MenuItem> mItemList = new ArrayList<>(); //TESTING
+//    private List<Order> mOrderList = new ArrayList<>();
+//    private List<OrderItem> mItemList = new ArrayList<>(); //TESTING
+    private List<Object> mObjectList = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,23 +44,23 @@ public class Status extends Activity {
     private void initText( ){
         Log.d(TAG, "initText: preparing text");
         ///////////TESTING//////////////
-        Payment payment = new Payment();
-
-        MenuItem item = new MenuItem("Test1","description",51.00,2,false,false,"https://www.healthymummy.com/wp-content/uploads/2017/05/Chicken-and-Corn-Pot-Pie-.jpg",true);
-        MenuItem item2 = new MenuItem("Test1","description",51.00,2,false,false,"https://www.healthymummy.com/wp-content/uploads/2017/05/Chicken-and-Corn-Pot-Pie-.jpg",true);
-        MenuItem item3 = new MenuItem("Test1","description",51.00,2,false,false,"https://www.healthymummy.com/wp-content/uploads/2017/05/Chicken-and-Corn-Pot-Pie-.jpg",true);
-
-        mItemList.add(item);
-        mItemList.add(item2);
-        mItemList.add(item3);
-
-        Order order = new Order(mItemList.size(), mItemList);
-        Order order2 = new Order(mItemList.size(), mItemList);;
-        Order order3 = new Order(mItemList.size(), mItemList);
-
-        mOrderList.add(order);
-        mOrderList.add(order2);
-        mOrderList.add(order3);
+//        Payment payment = new Payment();
+//
+//        MenuItem item = new MenuItem("Test1","description",51.00,2,false,false,"https://www.healthymummy.com/wp-content/uploads/2017/05/Chicken-and-Corn-Pot-Pie-.jpg",true);
+//        MenuItem item2 = new MenuItem("Test1","description",51.00,2,false,false,"https://www.healthymummy.com/wp-content/uploads/2017/05/Chicken-and-Corn-Pot-Pie-.jpg",true);
+//        MenuItem item3 = new MenuItem("Test1","description",51.00,2,false,false,"https://www.healthymummy.com/wp-content/uploads/2017/05/Chicken-and-Corn-Pot-Pie-.jpg",true);
+//
+//        mItemList.add(item);
+//        mItemList.add(item2);
+//        mItemList.add(item3);
+//
+//        Order order = new Order(mItemList.size(), mItemList);
+//        Order order2 = new Order(mItemList.size(), mItemList);;
+//        Order order3 = new Order(mItemList.size(), mItemList);
+//
+//        mOrderList.add(order);
+//        mOrderList.add(order2);
+//        mOrderList.add(order3);
         ///////////TESTING//////////////
 
         initStatusList();
@@ -65,13 +68,23 @@ public class Status extends Activity {
 
     private void initStatusList( ){
         RecyclerView recyclerView = findViewById(R.id.statusRecyclerView);
-        StatusAdapter adapter  = new StatusAdapter(mItemList, mOrderList,this);///WILL ONLY BE ONE LIST ONCE MERGED WITH VIEN
+
+        for (Order order : MainMenu.orders) {
+            mObjectList.add(order);
+        }
+        for (Order order : MainMenu.orders){
+            for (OrderItem orderItem : order.getOrderItemList()) {
+                mObjectList.add(orderItem);
+            }
+        }
+
+        //StatusPaymentAdapter adapter  = new StatusPaymentAdapter(mOrderList, mItemList, this);
+        //PaymentAdapter adapter2 = new PaymentAdapter(mItemList, this);
+
+        StatusPaymentAdapter adapter = new StatusPaymentAdapter(mObjectList, this);
         recyclerView.setAdapter(adapter);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-    }
-
-    public ArrayList<Order> getmItemList(){
-        return mOrderList;
     }
 }

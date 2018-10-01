@@ -5,12 +5,21 @@ public class OrderItem {
     private double price;
     private double total;
     private int qty;
+    private String orderNotes;
 
     public OrderItem(String title, double price, int qty){
         this.title = title;
         this.price = price;
         this.qty = qty;
         total = price*qty;
+    }
+
+    public OrderItem(String title, double price, int qty, String orderNotes){
+        this.title = title;
+        this.price = price;
+        this.qty = qty;
+        total = price*qty;
+        this.orderNotes = orderNotes;
     }
 
     public String getTitle( ){

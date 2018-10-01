@@ -12,18 +12,20 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder>{
     private static final String TAG = "StatusAdapter";
-    private ArrayList<MenuItem> mItem = new ArrayList<>(); ///TEST
-    private ArrayList<Order> mOrder = new ArrayList<>(); //TEST
+    private List<OrderItem> mItem = new ArrayList<>(); ///TEST
+    private List<Order> mOrder = new ArrayList<>(); //TEST
     private Context mContext;
 
-    public StatusAdapter(ArrayList<MenuItem> mItem, ArrayList<Order> mOrder, Context mContext) {
+    public StatusAdapter(List<Order> mOrder, List<OrderItem> mItem, Context mContext) {
         this.mItem = mItem;
         this.mOrder = mOrder;
         this.mContext = mContext;
     }
+
 
     @NonNull
     @Override
@@ -47,14 +49,6 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
         viewHolder.dishQty.setText("DISHES "+Integer.toString(mOrder.get(i).getDishQty()));
         viewHolder.orderDateTime.setText("Ordered "+ mOrder.get(i).getOrderTimeDate().toString());
         viewHolder.orderStatus.setText("STATUS "+ mOrder.get(i).getCustomerStatus());
-
-//        viewHolder.item.setOnClickListener(new View.OnClickListener(){
-//            @Override
-//            public void onClick(View view){
-//                Log.d(TAG, "onClick: clicked on: " + mItem.get(i) );
-//                Toast.makeText(mContext, (CharSequence) mItem.get(i), Toast.LENGTH_SHORT).show();
-//            }
-//        });
     }
 
     @Override

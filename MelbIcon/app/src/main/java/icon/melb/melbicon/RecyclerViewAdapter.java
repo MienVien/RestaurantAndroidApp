@@ -28,6 +28,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private List<MenuItem> mData;
     private transient Bitmap imageBitmap;
     private Order order = MainMenu.currentOrder;
+    //private List<OrderItem> orderItemList = new ArrayList<>();
 
     public RecyclerViewAdapter(Context mContext, List<MenuItem> mData) {
         this.mContext = mContext;
@@ -55,6 +56,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public int getItemCount() {
         return mData.size();
     }
+
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -154,7 +156,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 }
             });
 
-            EditText note = (EditText) view.findViewById(R.id.addNotes);
+            final EditText note = (EditText) view.findViewById(R.id.addNotes);
 
             Button addToOrderBtn = (Button) view.findViewById(R.id.addBtn);
 
@@ -173,15 +175,21 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 @Override
                 public void onClick(View v) {
                     int qty = Integer.parseInt(quantity.getText().toString());
-                    OrderItem orderItem = new OrderItem(menuItem.getTitle(), menuItem.getPrice(), qty);
-                    order.addToOrder(orderItem);
+                    String notes = note.getText().toString();
+
+                    if (notes.isEmpty()) {
+                        OrderItem orderItem = new OrderItem(menuItem.getTitle(), menuItem.getPrice(), qty);
+                        order.addToOrderItemList(orderItem);
+                    } else{
+                        OrderItem orderItem = new OrderItem(menuItem.getTitle(), menuItem.getPrice(), qty, notes);
+                        order.addToOrderItemList(orderItem);
+                    };
+
                     dialog.dismiss();
-                    Log.d("Current Order", String.valueOf(order.getOrderItemList().size()));
+                    //Log.d("Current Order", String.valueOf(orderItemList.getOrderItemList().size()));
                 }
             });
-
             dialog.show();
-
             //Toast.makeText(mContext, "MenuItem clicked at " + getLayoutPosition(), Toast.LENGTH_SHORT).show();
         }
     }

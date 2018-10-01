@@ -1,6 +1,5 @@
 package icon.melb.melbicon;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +17,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,7 +26,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
@@ -50,7 +49,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.content.ContentValues.TAG;
-import static java.lang.System.out;
 
 public class MainMenu extends AppCompatActivity {
 
@@ -66,6 +64,7 @@ public class MainMenu extends AppCompatActivity {
 
     public static List<Order> orders = new ArrayList<>();
     public static Order currentOrder = new Order();
+    //public static RecyclerViewAdapter currentOrderItem;
     public static int currentOrderPos = 0;
 
 
@@ -75,7 +74,7 @@ public class MainMenu extends AppCompatActivity {
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main_menu);
 
-        Utils.getDatabase();
+        FireBaseUtils.getDatabase();
 
         lstSpecial = new ArrayList<>();
         lstStarter = new ArrayList<>();
@@ -84,7 +83,7 @@ public class MainMenu extends AppCompatActivity {
         lstDessert = new ArrayList<>();
         lstDrinks = new ArrayList<>();
 
-        operateDatabse();
+        operateDatabase();
 
         //Pass Order to other activities for use
         /*passOrderToActivity(RecyclerViewAdapter.class);
@@ -129,7 +128,7 @@ public class MainMenu extends AppCompatActivity {
         viewOrderBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //                Toast.makeText(getContext(), "Go to view order", Toast.LENGTH_SHORT).show();
+//              Toast.makeText(getContext(), "Go to view order", Toast.LENGTH_SHORT).show();
                 viewOrder();
             }
         });
@@ -159,6 +158,7 @@ public class MainMenu extends AppCompatActivity {
     }
 
     private void viewOrder() {
+
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainMenu.this);
         View mView = getLayoutInflater().inflate(R.layout.view_order_dialog, null);
         ImageButton backBtn = (ImageButton) mView.findViewById(R.id.backBtn);
@@ -166,7 +166,7 @@ public class MainMenu extends AppCompatActivity {
         final SwipeMenuListView listView = (SwipeMenuListView) mView.findViewById(R.id.listView);
         final TextView totalPrice = (TextView) mView.findViewById(R.id.totalPrice);
 
-        final ArrayAdapter adapter = new ArrayAdapter(MainMenu.this, android.R.layout.simple_list_item_1,  MainMenu.currentOrder.getOrderItemList());
+        final ArrayAdapter adapter = new ArrayAdapter(MainMenu.this, android.R.layout.simple_list_item_1,  currentOrder.getOrderItemList());
         listView.setAdapter(adapter);
 
         SwipeMenuCreator creator = new SwipeMenuCreator() {
@@ -226,28 +226,33 @@ public class MainMenu extends AppCompatActivity {
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 MainMenu.orders.add(MainMenu.currentOrder);
                 MainMenu.newOrder();
 
                 Intent navigate = new Intent(MainMenu.this, WaitScreen.class);
 
                 dialog.dismiss();
-
                 startActivity(navigate);
-
-//                Log.d("Submit Order", "Submitted Order");
-//                Log.d("Size", Integer.toString(MainMenu.orders.size()));
-//                Log.d("Test Details", MainMenu.orders.get(0).getOrderItemList().get(0).getTitle());
             }
         });
-
         dialog.show();
+    }
+
+    private int getOrderListQtyTotal( ){
+        int qtyTotal = 0;
+
+        for(OrderItem po: currentOrder.getOrderItemList()) {
+            qtyTotal += po.getTotal();
+        }
+       return qtyTotal;
     }
 
     public static void newOrder() {
         currentOrder = new Order();
     }
 
+//////////////////////////////GENERATING MENU/////////////////////////////////////
     private void setupTabIcons() {
         View view0 = getLayoutInflater().inflate(R.layout.customtab, null);
         view0.setBackgroundResource(R.mipmap.specialsicons);
@@ -359,8 +364,8 @@ public class MainMenu extends AppCompatActivity {
             return 6;
         }
     }
-
-    private void operateDatabse() {
+//////////////////////////////////DATABASE///////////////////////////////////////
+    private void operateDatabase() {
         mRef = FirebaseDatabase.getInstance().getReference("menu");
         mRef.keepSynced(true);
 
@@ -406,12 +411,6 @@ public class MainMenu extends AppCompatActivity {
         return dataList;
     }
 
-//    public void passOrderToActivity(Class targetActivity) {
-//        Intent intent = new Intent(MainMenu.this, targetActivity);
-//        intent.putExtra("orders", (Serializable) orders);
-//        //getIntent().getSerializableExtra("Order");
-//    }
-
     private Bitmap getImageFromUrl(String img_src) throws Exception {
         retriever = new RetrieveMenuTask();
         return retriever.execute(img_src).get();
@@ -430,9 +429,7 @@ public class MainMenu extends AppCompatActivity {
                     connection.connect();
                     InputStream input = connection.getInputStream();
                     Bitmap myimg = BitmapFactory.decodeStream(input);
-                   // myimg.compress(Bitmap.CompressFormat.PNG,90, out); //MAY NOT BE NECESSARY
-                     ByteArrayOutputStream out = new ByteArrayOutputStream();
-                     myimg.compress(Bitmap.CompressFormat.PNG, 90, out);
+
                     return myimg;
             }
             catch (Exception e) {
