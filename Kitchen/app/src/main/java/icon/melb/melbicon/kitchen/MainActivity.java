@@ -1,12 +1,9 @@
-package icon.melb.melbicon.Kitchen;
+package icon.melb.melbicon.kitchen;
 
-import android.app.ActionBar;
 import android.app.Activity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import icon.melb.melbicon.R;
 
 public class MainActivity extends Activity {
 

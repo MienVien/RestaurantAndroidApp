@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".search">
+
+    <SearchView
+        android:id="@+id/searchView"
+        android:layout_width="598dp"
+        android:layout_height="68dp"
+        android:layout_marginBottom="611dp"
+        android:layout_marginEnd="213dp"
+        android:layout_marginStart="213dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.00999999" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/allItems"
+        android:layout_width="1008dp"
+        android:layout_height="400dp"
+        android:layout_marginBottom="97dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchView"
+        app:layout_constraintVertical_bias="0.050000012" />
+</android.support.constraint.ConstraintLayout>

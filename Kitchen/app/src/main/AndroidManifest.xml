@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="icon.melb.melbicon">
+    package="icon.melb.melbicon.kitchen">
 
     <application
         android:allowBackup="true"
@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Kitchen.Kitchen_page">
+        <activity android:name=".Kitchen_page">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -17,9 +17,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Kitchen.order_list"
-            android:label="@string/title_activity_order_list"
-            android:theme="@style/AppTheme"></activity>
+            android:name=".addRemove"
+            android:label="@string/title_activity_add_remove"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".changeStatus" />
+        <activity android:name=".search"></activity>
     </application>
 
 </manifest>

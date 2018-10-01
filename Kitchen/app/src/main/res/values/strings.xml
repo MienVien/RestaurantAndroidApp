@@ -3,4 +3,8 @@
     <string name="title_activity_kkitchen_activity">kkitchen_activity</string>
     <string name="title_activity_kitchen_page">Kitchen_page</string>
     <string name="title_activity_order_list">order_list</string>
+    <string name="title_activity_add_remove">addRemove</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
