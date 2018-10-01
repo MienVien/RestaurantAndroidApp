@@ -431,8 +431,8 @@ public class MainMenu extends AppCompatActivity {
                     InputStream input = connection.getInputStream();
                     Bitmap myimg = BitmapFactory.decodeStream(input);
                    // myimg.compress(Bitmap.CompressFormat.PNG,90, out); //MAY NOT BE NECESSARY
-                     ByteArrayOutputStream out = new ByteArrayOutputStream();
-                     myimg.compress(Bitmap.CompressFormat.PNG, 90, out);
+                   //  ByteArrayOutputStream out = new ByteArrayOutputStream();
+                   //  myimg.compress(Bitmap.CompressFormat.PNG, 90, out);
                     return myimg;
             }
             catch (Exception e) {
