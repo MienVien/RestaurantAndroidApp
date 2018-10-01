@@ -68,6 +68,7 @@ public class Status extends Activity {
 
     private void initStatusList( ){
         RecyclerView recyclerView = findViewById(R.id.statusRecyclerView);
+        int orderSize = 0;
 
         for (Order order : MainMenu.orders) {
             mObjectList.add(order);
@@ -75,13 +76,14 @@ public class Status extends Activity {
         for (Order order : MainMenu.orders){
             for (OrderItem orderItem : order.getOrderItemList()) {
                 mObjectList.add(orderItem);
+                orderSize += orderSize;
             }
         }
 
         //StatusPaymentAdapter adapter  = new StatusPaymentAdapter(mOrderList, mItemList, this);
         //PaymentAdapter adapter2 = new PaymentAdapter(mItemList, this);
 
-        StatusPaymentAdapter adapter = new StatusPaymentAdapter(mObjectList, this);
+        StatusPaymentAdapter adapter = new StatusPaymentAdapter(mObjectList, orderSize,  this);
         recyclerView.setAdapter(adapter);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

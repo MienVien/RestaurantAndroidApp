@@ -20,8 +20,9 @@ public class StatusPaymentAdapter extends RecyclerView.Adapter<RecyclerView.View
     private static final int ITEM_TYPE_ORDER_ITEM = 1;
     private final Context context;
     private List<Object> items = new ArrayList<>();
+    private int orderSize;
 
-    public StatusPaymentAdapter(List<Object> items, Context context) {
+    public StatusPaymentAdapter(List<Object> items, int orderSize, Context context) {
         this.items = items;
         this.context = context;
     }
@@ -77,7 +78,7 @@ public class StatusPaymentAdapter extends RecyclerView.Adapter<RecyclerView.View
     Order order = (Order) items.get(position);
         if (order != null) {
             vh1.orderID.setText("ORDER# 00000");
-            vh1.dishQty.setText("DISHES "+Integer.toString(order.getDishQty()));
+            vh1.dishQty.setText("DISHES "+Integer.toString(orderSize));
             vh1.orderDateTime.setText("Ordered "+ order.getOrderTimeDate().toString());
             vh1.orderStatus.setText("STATUS "+ order.getCustomerStatus());
         }
