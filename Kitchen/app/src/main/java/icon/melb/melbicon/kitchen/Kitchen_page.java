@@ -20,9 +20,7 @@ public class Kitchen_page extends Activity {
 
     private ImageButton allMenu;
     private ImageButton completedOrder;
-    private ImageButton backBT;
     private ImageButton addRemoveBT;
-    private ImageButton refreshBT;
     private List<KitchenOrder> mKitchenOrderList = new ArrayList<>();
     private List<KitchenOrder> mCompletedOrderList = new ArrayList<>();
 
@@ -76,6 +74,16 @@ public class Kitchen_page extends Activity {
 
     private void initText( ){
         Log.d( TAG, "initText: preparing text" );
+
+        KitchenOrder ko = ( KitchenOrder) getIntent().getSerializableExtra( "status_changed" );
+
+        if( ko != null ){
+            for( KitchenOrder k : mKitchenOrderList ){
+                if( k.getOrderTimeDate() == ko.getOrderTimeDate() && k.getOrderItemList() == ko.getOrderItemList() )
+                    mKitchenOrderList.remove( k );
+            }
+            mKitchenOrderList.add( ko );
+        }
         KitchenOrder order1 = new KitchenOrder( 4, items );
         KitchenOrder order2 = new KitchenOrder( 3, items );
         KitchenOrder order3 = new KitchenOrder( 4, items );
@@ -92,11 +100,19 @@ public class Kitchen_page extends Activity {
     private void completedInitText( ){
         Log.d( TAG, "completedInitText: preparing text" );
 
+        KitchenOrder ko = (KitchenOrder) getIntent().getSerializableExtra( "order_completed" );
+
         KitchenOrder order1 = new KitchenOrder( 4, items );
         KitchenOrder order2 = new KitchenOrder( 3, items );
 
         add( order1, mCompletedOrderList );
         add( order2, mCompletedOrderList );
+
+        if( ko != null ){
+            Log.d( TAG, "Inside CompletedInit: " + ko.toString( ) );
+            mKitchenOrderList.remove( ko );
+            mCompletedOrderList.add( ko );
+        }
 
         mCompletedOrderList.size();
 

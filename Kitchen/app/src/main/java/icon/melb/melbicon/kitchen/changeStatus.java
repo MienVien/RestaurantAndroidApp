@@ -1,5 +1,6 @@
 package icon.melb.melbicon.kitchen;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +12,7 @@ import android.util.Log;
 
 import java.util.List;
 import java.util.ArrayList;
+import android.content.Context;
 
 public class changeStatus extends AppCompatActivity {
 
@@ -42,9 +44,27 @@ public class changeStatus extends AppCompatActivity {
             public void onClick(View v) {
                 ko.changeKitchenStatus( );
                 ko.changeCustomerStatus( );
+                Context context = v.getContext();
+                Intent intent = new Intent( context, Kitchen_page.class );
+                intent.putExtra( "status_changed", ko );
+                context.startActivity( intent );
             }
         });
 
+        completed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if( ko.getKitchenStatus().equals( "COOKING" )){
+                    ko.changeKitchenStatus( );
+                    ko.changeCustomerStatus( );
+
+                    Context context = v.getContext();
+                    Intent intent = new Intent( context, Kitchen_page.class );
+                    intent.putExtra( "order_completed", ko );
+                    context.startActivity( intent );
+                }
+            }
+        });
         initText( );
     }
 

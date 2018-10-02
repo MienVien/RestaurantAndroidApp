@@ -47,9 +47,9 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
         Log.d( TAG, "" + mKitchenItem.get(i).getOrderItemList() );
 
         viewHolder.tableNum.setText( "\tTable: 1" );//+ mKitchenItem.get(i).getTableNum( ) );
-        viewHolder.NumOfDish.setText( "Dishes: " + mKitchenItem.get(i).getDishQty( ) );
-        viewHolder.OrderReceived.setText( "Order Received: " + mKitchenItem.get(i).getOrderTimeDate() );
-        viewHolder.Status.setText("Status " + mKitchenItem.get(i).getKitchenStatus().toUpperCase( ) );
+        viewHolder.NumOfDish.setText( "\t\t\tDishes: " + mKitchenItem.get(i).getDishQty( ) );
+        viewHolder.OrderReceived.setText( "\t\t\tOrder Received: " + mKitchenItem.get(i).getOrderTimeDate() );
+        viewHolder.Status.setText("\t\t\tStatus " + mKitchenItem.get(i).getKitchenStatus().toUpperCase( ) );
 
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

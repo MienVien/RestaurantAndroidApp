@@ -117,6 +117,9 @@ public class addRemoveAdapter extends RecyclerView.Adapter<addRemoveAdapter.addR
     }
 
     private Filter itemFilter = new Filter() {
+
+        FilterResults results = new FilterResults( );
+
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             List<OrderItem> filteredList = new ArrayList<>();
@@ -134,9 +137,9 @@ public class addRemoveAdapter extends RecyclerView.Adapter<addRemoveAdapter.addR
                     }
                 }
             }
-            FilterResults results = new FilterResults( );
             results.values = filteredList;
 
+            Log.d( TAG, results.toString() );
             return results;
         }
 
@@ -144,7 +147,8 @@ public class addRemoveAdapter extends RecyclerView.Adapter<addRemoveAdapter.addR
         protected void publishResults(CharSequence constraint, FilterResults results) {
             mMenuItem.clear();
             mMenuItem.addAll( (List<OrderItem>) results.values );
+            Log.d( TAG, "publishing: " + mMenuItem.toString() );
             notifyDataSetChanged();
-        }
+    }
     };
 }

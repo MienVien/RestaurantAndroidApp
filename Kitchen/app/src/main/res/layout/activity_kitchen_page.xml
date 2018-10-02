@@ -22,7 +22,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@mipmap/all_order" />
+        android:src="@mipmap/all_order" />
 
     <ImageButton
         android:id="@+id/completedOrder"
@@ -37,7 +37,7 @@
         app:layout_constraintStart_toEndOf="@+id/allMenu"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@mipmap/completed_order" />
+        android:src="@mipmap/completed_order" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -56,12 +56,15 @@
         android:id="@+id/addRemoveBT"
         android:layout_width="623dp"
         android:layout_height="73dp"
+        android:layout_marginEnd="168dp"
+        android:layout_marginStart="169dp"
         android:background="#00FFFFFF"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recyclerView"
         app:layout_constraintVertical_bias="0.36"
-        app:srcCompat="@mipmap/kitchen"
-        tools:layout_editor_absoluteX="169dp" />
+        android:src="@mipmap/kitchen" />
 
 </android.support.constraint.ConstraintLayout>

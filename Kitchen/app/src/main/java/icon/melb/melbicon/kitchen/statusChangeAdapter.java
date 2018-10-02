@@ -58,6 +58,7 @@ public class statusChangeAdapter extends RecyclerView.Adapter<statusChangeAdapte
         LinearLayout screen;
        CheckedTextView itemList;
         SparseBooleanArray itemStateArray = new SparseBooleanArray( );
+
         public statusViewHolder(@NonNull View itemView) {
             super(itemView);
             screen = itemView.findViewById( R.id.addRemove_list );
