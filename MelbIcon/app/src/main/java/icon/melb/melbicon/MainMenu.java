@@ -1,6 +1,8 @@
 package icon.melb.melbicon;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -26,6 +28,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,14 +66,12 @@ public class MainMenu extends AppCompatActivity {
     private List<MenuItem> lstSpecial, lstStarter, lstMain, lstSide, lstDessert, lstDrinks;
     private DatabaseReference mRef;
     private RetrieveImageTask imageRetriever;
-    //private RetireveMenuTask menuRetriever;
     private ImageButton homeBtn, viewOrderBtn, assistantBtn;
     private Button stopButton;
 
     public static List<Order> orders = new ArrayList<>();
     public static Order currentOrder = new Order();
     public static int currentOrderPos = 0;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -401,14 +402,21 @@ public class MainMenu extends AppCompatActivity {
                         Log.d(TAG, "DISPLAYED");
 
                         //Log.d(TAG, "Index: " +i);
+                        ImageView image = new ImageView(MainMenu.this);
 
                         MenuItem menuItem = child.getValue(MenuItem.class);
+                        String url = Objects.requireNonNull(menuItem).getImg_src( );
 
-                        try {
-                            menuItem.setImageBitmap(getImageFromUrl(Objects.requireNonNull(menuItem).getImg_src()));
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                        image.setTag(menuItem);
+
+                        RetrieveImageTask retrieveImageTask = new RetrieveImageTask(MainMenu.this);
+                        retrieveImageTask.execute(image);
+
+//                        try {
+//                            menuItem.setImageBitmap(getImageFromUrl(Objects.requireNonNull(menuItem).getImg_src()));
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
 
                         dataList.add(menuItem);
                     }
@@ -424,55 +432,58 @@ public class MainMenu extends AppCompatActivity {
         return dataList;
     }
 
-    private Bitmap getImageFromUrl(String img_src) throws Exception {
-        imageRetriever = new RetrieveImageTask();
-        return imageRetriever.execute(img_src).get();
-    }
+//    private Bitmap getImageFromUrl(String img_src) throws Exception {
+//        imageRetriever = new RetrieveImageTask(MainMenu.this);
+//        return imageRetriever.execute(img_src).get();
+//    }
 
 
 
-    public class RetrieveImageTask extends AsyncTask<String, Void, Bitmap> {
+    public class RetrieveImageTask extends AsyncTask<ImageView, Void, Bitmap> {
         private Exception exception;
-        private transient Bitmap img;
+
+        ImageView imageView = null;
+        ProgressDialog dialog;
+        Context context;
+
+        public RetrieveImageTask(Context context){
+            this.context = context;
+        }
 
         @Override
-        protected Bitmap doInBackground(String... urls) {
-            try {
-                    URL url = new URL(urls[0]);
-                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                    //connection.setDoInput(true);
-                    connection.connect();
-                    InputStream input = connection.getInputStream();
-                    Bitmap myimg = BitmapFactory.decodeStream(input);
+        protected Bitmap doInBackground(ImageView... imageViews) {
+            this.imageView = imageViews[0];
+            return download_Image(imageView.getTag().toString());
+        }
 
-                    return myimg;
-            }
-            catch (Exception e) {
-                this.exception = e;;
-            }
-            return null;
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            imageView.setImageBitmap(result);
+            if (dialog != null)
+                dialog.dismiss();
+        }
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog = ProgressDialog.show(context, "Title","Message");
+        }
+
+        private Bitmap download_Image(String url) {
+            Bitmap bmp =null;
+            try {
+                URL urln = new URL(url);
+                HttpURLConnection con = (HttpURLConnection) urln.openConnection();
+                InputStream input = con.getInputStream();
+                bmp = BitmapFactory.decodeStream(input);
+                if (null != bmp)
+                    return bmp;
+
+            }catch(Exception e){}
+                return bmp;
         }
     }
-//    public class RetrieveMenuTask extends AsyncTask<String, Void, Bitmap> {
-//        private Exception exception;
-//        private transient Bitmap img;
-//
-//        @Override
-//        protected Bitmap doInBackground(String... urls) {
-//            try {
-//                URL url = new URL(urls[0]);
-//                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-//                //connection.setDoInput(true);
-//                connection.connect();
-//                InputStream input = connection.getInputStream();
-//                Bitmap myimg = BitmapFactory.decodeStream(input);
-//
-//                return myimg;
-//            }
-//            catch (Exception e) {
-//                this.exception = e;;
-//            }
-//            return null;
-//        }
-//    }
 }
+
+
