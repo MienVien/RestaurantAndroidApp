@@ -19,10 +19,7 @@ import static android.content.ContentValues.TAG;
 public class Status extends Activity {
 
     private ImageButton backButton;
-//    private List<Order> mOrderList = new ArrayList<>();
-//    private List<OrderItem> mItemList = new ArrayList<>(); //TESTING
     private List<Object> mObjectList = new ArrayList<>();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,55 +35,28 @@ public class Status extends Activity {
                 startActivity(navigate);
             }
         });
+
         initText();
     }
 
     private void initText( ){
         Log.d(TAG, "initText: preparing text");
-        ///////////TESTING//////////////
-//        Payment payment = new Payment();
-//
-//        MenuItem item = new MenuItem("Test1","description",51.00,2,false,false,"https://www.healthymummy.com/wp-content/uploads/2017/05/Chicken-and-Corn-Pot-Pie-.jpg",true);
-//        MenuItem item2 = new MenuItem("Test1","description",51.00,2,false,false,"https://www.healthymummy.com/wp-content/uploads/2017/05/Chicken-and-Corn-Pot-Pie-.jpg",true);
-//        MenuItem item3 = new MenuItem("Test1","description",51.00,2,false,false,"https://www.healthymummy.com/wp-content/uploads/2017/05/Chicken-and-Corn-Pot-Pie-.jpg",true);
-//
-//        mItemList.add(item);
-//        mItemList.add(item2);
-//        mItemList.add(item3);
-//
-//        Order order = new Order(mItemList.size(), mItemList);
-//        Order order2 = new Order(mItemList.size(), mItemList);;
-//        Order order3 = new Order(mItemList.size(), mItemList);
-//
-//        mOrderList.add(order);
-//        mOrderList.add(order2);
-//        mOrderList.add(order3);
-        ///////////TESTING//////////////
-
         initStatusList();
     }
 
     private void initStatusList( ){
         RecyclerView recyclerView = findViewById(R.id.statusRecyclerView);
-        int orderSize = 0;
 
-        for (Order order : MainMenu.orders) {
-            mObjectList.add(order);
-        }
         for (Order order : MainMenu.orders){
+            mObjectList.add(order);
             for (OrderItem orderItem : order.getOrderItemList()) {
                 mObjectList.add(orderItem);
-                orderSize += orderSize;
             }
         }
 
-        //StatusPaymentAdapter adapter  = new StatusPaymentAdapter(mOrderList, mItemList, this);
-        //PaymentAdapter adapter2 = new PaymentAdapter(mItemList, this);
-
-        StatusPaymentAdapter adapter = new StatusPaymentAdapter(mObjectList, orderSize,  this);
+        StatusPaymentAdapter adapter = new StatusPaymentAdapter(mObjectList,  this);
         recyclerView.setAdapter(adapter);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
     }
 }

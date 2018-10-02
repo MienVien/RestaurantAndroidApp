@@ -19,6 +19,7 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.LogPrinter;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -26,6 +27,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
@@ -47,8 +49,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static android.content.ContentValues.TAG;
+import static java.security.AccessController.getContext;
 
 public class MainMenu extends AppCompatActivity {
 
@@ -64,7 +68,6 @@ public class MainMenu extends AppCompatActivity {
 
     public static List<Order> orders = new ArrayList<>();
     public static Order currentOrder = new Order();
-    //public static RecyclerViewAdapter currentOrderItem;
     public static int currentOrderPos = 0;
 
 
@@ -102,7 +105,7 @@ public class MainMenu extends AppCompatActivity {
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
-        View headerView = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+        View headerView = ((LayoutInflater) Objects.requireNonNull(getSystemService(Context.LAYOUT_INFLATER_SERVICE)))
                 .inflate(R.layout.customtab, null, false);
 
         setupTabIcons();
@@ -167,6 +170,7 @@ public class MainMenu extends AppCompatActivity {
         final TextView totalPrice = (TextView) mView.findViewById(R.id.totalPrice);
 
         final ArrayAdapter adapter = new ArrayAdapter(MainMenu.this, android.R.layout.simple_list_item_1,  currentOrder.getOrderItemList());
+
         listView.setAdapter(adapter);
 
         SwipeMenuCreator creator = new SwipeMenuCreator() {
@@ -234,18 +238,10 @@ public class MainMenu extends AppCompatActivity {
 
                 dialog.dismiss();
                 startActivity(navigate);
+                Toast.makeText(MainMenu.this, "Order Confirmed", Toast.LENGTH_SHORT).show();
             }
         });
         dialog.show();
-    }
-
-    private int getOrderListQtyTotal( ){
-        int qtyTotal = 0;
-
-        for(OrderItem po: currentOrder.getOrderItemList()) {
-            qtyTotal += po.getTotal();
-        }
-       return qtyTotal;
     }
 
     public static void newOrder() {
@@ -254,29 +250,30 @@ public class MainMenu extends AppCompatActivity {
 
 //////////////////////////////GENERATING MENU/////////////////////////////////////
     private void setupTabIcons() {
+
         View view0 = getLayoutInflater().inflate(R.layout.customtab, null);
         view0.setBackgroundResource(R.mipmap.specialsicons);
-        tabLayout.getTabAt(0).setCustomView(view0);
+        Objects.requireNonNull(tabLayout.getTabAt(0)).setCustomView(view0);
 
         View view1 = getLayoutInflater().inflate(R.layout.customtab, null);
         view1.setBackgroundResource(R.mipmap.startersicon); //starters
-        tabLayout.getTabAt(1).setCustomView(view1);
+        Objects.requireNonNull(tabLayout.getTabAt(1)).setCustomView(view1);
 
         View view2 = getLayoutInflater().inflate(R.layout.customtab, null);
         view2.setBackgroundResource(R.mipmap.mainsicon2);
-        tabLayout.getTabAt(2).setCustomView(view2);
+        Objects.requireNonNull(tabLayout.getTabAt(2)).setCustomView(view2);
 
         View view3 = getLayoutInflater().inflate(R.layout.customtab, null);
         view3.setBackgroundResource(R.mipmap.sidesicon2);
-        tabLayout.getTabAt(3).setCustomView(view3);
+        Objects.requireNonNull(tabLayout.getTabAt(3)).setCustomView(view3);
 
         View view4 = getLayoutInflater().inflate(R.layout.customtab, null);
         view4.setBackgroundResource(R.mipmap.dessertsicon2); //dessert
-        tabLayout.getTabAt(4).setCustomView(view4);
+        Objects.requireNonNull(tabLayout.getTabAt(4)).setCustomView(view4);
 
         View view5 = getLayoutInflater().inflate(R.layout.customtab, null);
         view5.setBackgroundResource(R.mipmap.drinksicon);
-        tabLayout.getTabAt(5).setCustomView(view5);
+        Objects.requireNonNull(tabLayout.getTabAt(5)).setCustomView(view5);
     }
 
     @Override
@@ -385,23 +382,36 @@ public class MainMenu extends AppCompatActivity {
         lstDrinks = getDatabase(drinks);
     }
 
-    private List<MenuItem> getDatabase(DatabaseReference dataRef) {
+    private List<MenuItem> getDatabase(final DatabaseReference dataRef) {
         final List<MenuItem> dataList = new ArrayList<>();
 
         dataRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
+                int index = 0;
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    MenuItem menuItem = child.getValue(MenuItem.class);
-                    try {
-                        menuItem.setImageBitmap(getImageFromUrl(menuItem.getImg_src()));
-                    } catch (Exception e) {
-                        e.printStackTrace();
+
+//                  Log.d(TAG, "getTitle: "+ dataSnapshot.child(Integer.toString(i)).child("title").getValue());
+//                  Log.d(TAG, "getAvailable: " + dataSnapshot.child(Integer.toString(i)).child("available").getValue());
+
+                    if (dataSnapshot.child(Integer.toString(index)).child("available").getValue().equals(true)){
+                        Log.d(TAG, "DISPLAYED");
+
+                        //Log.d(TAG, "Index: " +i);
+
+                        MenuItem menuItem = child.getValue(MenuItem.class);
+
+                        try {
+                            menuItem.setImageBitmap(getImageFromUrl(Objects.requireNonNull(menuItem).getImg_src()));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        dataList.add(menuItem);
                     }
-                    dataList.add(menuItem);
+                    ++index;
+                    }
                 }
-            }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {

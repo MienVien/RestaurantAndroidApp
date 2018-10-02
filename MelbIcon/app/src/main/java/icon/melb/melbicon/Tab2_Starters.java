@@ -23,6 +23,7 @@ import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Tab2_Starters extends Fragment  {
     List<MenuItem> lstMenuItem;
@@ -45,7 +46,7 @@ public class Tab2_Starters extends Fragment  {
 
         Bundle args = getArguments();
 
-        lstMenuItem = (List<MenuItem>) args.getSerializable("StartersList");
+        lstMenuItem = (List<MenuItem>) Objects.requireNonNull(args).getSerializable("StartersList");
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerview);
 

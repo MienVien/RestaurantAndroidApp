@@ -16,13 +16,14 @@ import java.util.List;
 
 public class StatusPaymentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private static final String TAG = "StatusPaymentAdapter";
     private static final int ITEM_TYPE_ORDER = 0;
     private static final int ITEM_TYPE_ORDER_ITEM = 1;
     private final Context context;
     private List<Object> items = new ArrayList<>();
-    private int orderSize;
+    private int index = 0;
 
-    public StatusPaymentAdapter(List<Object> items, int orderSize, Context context) {
+    public StatusPaymentAdapter(List<Object> items, Context context) {
         this.items = items;
         this.context = context;
     }
@@ -36,12 +37,13 @@ public class StatusPaymentAdapter extends RecyclerView.Adapter<RecyclerView.View
     public int getItemViewType(int position) {
         if (items.get(position) instanceof Order) {
             return ITEM_TYPE_ORDER;
-        } else if (items.get(position) instanceof String) {
+        } else if (items.get(position) instanceof OrderItem) {
             return ITEM_TYPE_ORDER_ITEM;
         }
         return -1;
     }
 
+    @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         RecyclerView.ViewHolder viewHolder = null;
@@ -50,18 +52,16 @@ public class StatusPaymentAdapter extends RecyclerView.Adapter<RecyclerView.View
         switch (viewType) {
             case ITEM_TYPE_ORDER:
                 View v1 = inflater.inflate(R.layout.status_list_header, viewGroup, false);
-                viewHolder = new OrderViewHolder(v1);
-                break;
+                return new OrderViewHolder(v1);
             case ITEM_TYPE_ORDER_ITEM:
                 View v2 = inflater.inflate(R.layout.item_list, viewGroup, false);
-                viewHolder = new OrderItemViewHolder(v2);
-                break;
+                return new OrderItemViewHolder(v2);
         }
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
         switch (viewHolder.getItemViewType()) {
             case ITEM_TYPE_ORDER:
                 OrderViewHolder vh1 = (OrderViewHolder) viewHolder;
@@ -76,11 +76,13 @@ public class StatusPaymentAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     private void configureViewHolder1(OrderViewHolder vh1, int position) {
     Order order = (Order) items.get(position);
+
         if (order != null) {
-            vh1.orderID.setText("ORDER# 00000");
-            vh1.dishQty.setText("DISHES "+Integer.toString(orderSize));
-            vh1.orderDateTime.setText("Ordered "+ order.getOrderTimeDate().toString());
-            vh1.orderStatus.setText("STATUS "+ order.getCustomerStatus());
+            ++index;
+            vh1.orderID.setText("ORDER#"+ index);
+            vh1.dishQty.setText("DISHES: "+Integer.toString(((Order) items.get(position)).getOrderItemList().size()));
+            vh1.orderDateTime.setText("Ordered: "+ order.getOrderTimeDate().toString());
+            vh1.orderStatus.setText("STATUS: "+ order.getCustomerStatus());
         }
     }
 
@@ -107,7 +109,7 @@ public class StatusPaymentAdapter extends RecyclerView.Adapter<RecyclerView.View
         TextView qty;
         TextView total;
 
-        public OrderItemViewHolder(@NonNull View itemView) {
+        OrderItemViewHolder(@NonNull View itemView) {
             super(itemView);
 
             item = itemView.findViewById(R.id.itemContainer);
@@ -126,7 +128,7 @@ public class StatusPaymentAdapter extends RecyclerView.Adapter<RecyclerView.View
         TextView orderDateTime;
         TextView orderStatus;
 
-        public OrderViewHolder(@NonNull View itemView) {
+        OrderViewHolder(@NonNull View itemView) {
             super(itemView);
 
             item = itemView.findViewById(R.id.itemContainer);

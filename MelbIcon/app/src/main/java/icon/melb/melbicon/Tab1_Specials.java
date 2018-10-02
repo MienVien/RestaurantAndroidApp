@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Tab1_Specials extends Fragment  {
     List<MenuItem> lstMenuItem;
@@ -39,7 +40,7 @@ public class Tab1_Specials extends Fragment  {
 
         Bundle args = getArguments();
 
-        lstMenuItem = (List<MenuItem>) args.getSerializable("SpecialsList");
+        lstMenuItem = (List<MenuItem>) Objects.requireNonNull(args).getSerializable("SpecialsList");
 
         Log.d("Passing Object", String.valueOf(lstMenuItem));
 
