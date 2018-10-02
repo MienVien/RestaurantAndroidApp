@@ -3,6 +3,7 @@ package icon.melb.melbicon;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -62,16 +63,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView itemName, itemDescription, itemPrice;
         ImageView itemImage;
+        CardView cardView;
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
+            cardView = (CardView) itemView.findViewById(R.id.cardView);
             itemName = (TextView) itemView.findViewById(R.id.itemName);
             itemDescription = (TextView) itemView.findViewById(R.id.itemDescription);
             itemPrice = (TextView) itemView.findViewById(R.id.itemPrice);
             itemImage = (ImageView) itemView.findViewById(R.id.itemImage);
 
-            itemImage.setOnClickListener(this);
+            cardView.setOnClickListener(this);
         }
 
         @Override
