@@ -62,7 +62,8 @@ public class MainMenu extends AppCompatActivity {
     private TabLayout tabLayout;
     private List<MenuItem> lstSpecial, lstStarter, lstMain, lstSide, lstDessert, lstDrinks;
     private DatabaseReference mRef;
-    private RetrieveMenuTask retriever;
+    private RetrieveImageTask imageRetriever;
+    //private RetireveMenuTask menuRetriever;
     private ImageButton homeBtn, viewOrderBtn, assistantBtn;
     private Button stopButton;
 
@@ -86,7 +87,6 @@ public class MainMenu extends AppCompatActivity {
         lstDessert = new ArrayList<>();
         lstDrinks = new ArrayList<>();
 
-        operateDatabase();
 
         //Pass Order to other activities for use
         /*passOrderToActivity(RecyclerViewAdapter.class);
@@ -110,6 +110,7 @@ public class MainMenu extends AppCompatActivity {
 
         setupTabIcons();
         setButtonAction();
+        operateDatabase();
 
     }
 
@@ -230,15 +231,17 @@ public class MainMenu extends AppCompatActivity {
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (currentOrder.getOrderItemList().size() != 0) {
+                    MainMenu.orders.add(MainMenu.currentOrder);
+                    MainMenu.newOrder();
 
-                MainMenu.orders.add(MainMenu.currentOrder);
-                MainMenu.newOrder();
+                    Intent navigate = new Intent(MainMenu.this, WaitScreen.class);
 
-                Intent navigate = new Intent(MainMenu.this, WaitScreen.class);
-
-                dialog.dismiss();
-                startActivity(navigate);
-                Toast.makeText(MainMenu.this, "Order Confirmed", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                    startActivity(navigate);
+                    Toast.makeText(MainMenu.this, "Order Confirmed", Toast.LENGTH_SHORT).show();
+                }
+                else { Toast.makeText(MainMenu.this, "Please add a Menu Item, before submitting", Toast.LENGTH_SHORT).show(); }
             }
         });
         dialog.show();
@@ -422,11 +425,13 @@ public class MainMenu extends AppCompatActivity {
     }
 
     private Bitmap getImageFromUrl(String img_src) throws Exception {
-        retriever = new RetrieveMenuTask();
-        return retriever.execute(img_src).get();
+        imageRetriever = new RetrieveImageTask();
+        return imageRetriever.execute(img_src).get();
     }
 
-    public class RetrieveMenuTask extends AsyncTask<String, Void, Bitmap> {
+
+
+    public class RetrieveImageTask extends AsyncTask<String, Void, Bitmap> {
         private Exception exception;
         private transient Bitmap img;
 
@@ -448,4 +453,26 @@ public class MainMenu extends AppCompatActivity {
             return null;
         }
     }
+//    public class RetrieveMenuTask extends AsyncTask<String, Void, Bitmap> {
+//        private Exception exception;
+//        private transient Bitmap img;
+//
+//        @Override
+//        protected Bitmap doInBackground(String... urls) {
+//            try {
+//                URL url = new URL(urls[0]);
+//                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//                //connection.setDoInput(true);
+//                connection.connect();
+//                InputStream input = connection.getInputStream();
+//                Bitmap myimg = BitmapFactory.decodeStream(input);
+//
+//                return myimg;
+//            }
+//            catch (Exception e) {
+//                this.exception = e;;
+//            }
+//            return null;
+//        }
+//    }
 }

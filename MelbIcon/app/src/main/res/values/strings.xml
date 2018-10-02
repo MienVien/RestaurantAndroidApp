@@ -23,7 +23,7 @@
     <string name="cash" />
     <string name="backButton" />
     <string name="title_activity_payment" />
-    <string name="table" />
+    <string name="table">ORDER STATUS</string>
     <string name="back_button" />
     <string name="title_activity_status_view" />
 </resources>
