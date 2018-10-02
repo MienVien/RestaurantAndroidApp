@@ -14,7 +14,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="104dp"
+            android:layout_width="114dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical">
@@ -44,7 +44,7 @@
 
         <ImageView
             android:id="@+id/itemImage"
-            android:layout_width="145dp"
+            android:layout_width="135dp"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"

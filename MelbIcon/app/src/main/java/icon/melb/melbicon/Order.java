@@ -8,7 +8,7 @@ import java.util.List;
 public class Order {
     private int dishQty;
     private Date orderDateTime;
-    private String cutomerStatus;
+    private String customerStatus;
     private String kitchenStatus;
     private List<OrderItem> combinedOrderItemList;
 
@@ -16,7 +16,7 @@ public class Order {
         this.dishQty = 1;
         this.orderDateTime = Calendar.getInstance().getTime();
         combinedOrderItemList = new ArrayList<>();
-        cutomerStatus = "IN PROGRESS";
+        customerStatus = "IN PROGRESS";
         kitchenStatus = "IN RECEIVED";
     }
 
@@ -24,7 +24,7 @@ public class Order {
         //this.dishQty = dishQty; //Total Items ordered per Table
         this.orderDateTime = Calendar.getInstance().getTime();
         this.combinedOrderItemList = combinedOrderItemList;
-        cutomerStatus = "IN PROGRESS";
+        customerStatus = "IN PROGRESS";
         kitchenStatus = "RECEIVED";
     }
 
@@ -35,7 +35,7 @@ public class Order {
         return orderDateTime;
     }
     public String getCustomerStatus(){
-        return cutomerStatus;
+        return customerStatus;
     }
     public String getKitchenStatus() {
         return kitchenStatus;
@@ -57,7 +57,7 @@ public class Order {
     }
 
     public void changeCustomerStatus(String cutomerStatus){
-    this.cutomerStatus = "COMPLETED";
+    this.customerStatus = "COMPLETED";
     }
 
     public void changeKitchenStatus(String kitchenStatus){
@@ -68,7 +68,5 @@ public class Order {
             this.kitchenStatus = "COMPLETED";
         }
     }
-
-
 
 }

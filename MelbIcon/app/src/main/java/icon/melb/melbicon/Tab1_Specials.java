@@ -28,9 +28,7 @@ public class Tab1_Specials extends Fragment  {
     RecyclerViewAdapter mAdapter;
 
 
-    public Tab1_Specials() {
-
-    }
+    public Tab1_Specials() { }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
