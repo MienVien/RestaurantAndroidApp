@@ -1,6 +1,7 @@
 package icon.melb.melbicon;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -431,9 +432,11 @@ public class MainMenu extends AppCompatActivity {
 
 
 
-    public class RetrieveImageTask extends AsyncTask<String, Void, Bitmap> {
+    public class RetrieveImageTask extends icon.melb.melbicon.RetrieveImageTask {
         private Exception exception;
         private transient Bitmap img;
+        ProgressDialog dialog;
+        Integer index;
 
         @Override
         protected Bitmap doInBackground(String... urls) {
@@ -446,6 +449,7 @@ public class MainMenu extends AppCompatActivity {
                     Bitmap myimg = BitmapFactory.decodeStream(input);
 
                     return myimg;
+
             }
             catch (Exception e) {
                 this.exception = e;;
@@ -453,26 +457,4 @@ public class MainMenu extends AppCompatActivity {
             return null;
         }
     }
-//    public class RetrieveMenuTask extends AsyncTask<String, Void, Bitmap> {
-//        private Exception exception;
-//        private transient Bitmap img;
-//
-//        @Override
-//        protected Bitmap doInBackground(String... urls) {
-//            try {
-//                URL url = new URL(urls[0]);
-//                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-//                //connection.setDoInput(true);
-//                connection.connect();
-//                InputStream input = connection.getInputStream();
-//                Bitmap myimg = BitmapFactory.decodeStream(input);
-//
-//                return myimg;
-//            }
-//            catch (Exception e) {
-//                this.exception = e;;
-//            }
-//            return null;
-//        }
-//    }
 }
