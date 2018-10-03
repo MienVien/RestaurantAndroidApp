@@ -3,6 +3,8 @@ package icon.melb.melbicon;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -21,14 +23,19 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
     private Context mContext;
     private List<MenuItem> mData;
     private transient Bitmap imageBitmap;
     private Order order = MainMenu.currentOrder;
+    private RetrieveImageTask imageRetriever;
     //private List<OrderItem> orderItemList = new ArrayList<>();
 
     public RecyclerViewAdapter(Context mContext, List<MenuItem> mData) {
@@ -50,6 +57,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         myViewHolder.itemName.setText(current.getTitle());
         myViewHolder.itemDescription.setText(current.getDescription());
         myViewHolder.itemPrice.setText("$" + current.getPrice());
+        try {
+            current.setImageBitmap(getImageFromUrl(Objects.requireNonNull(current).getImg_src()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         myViewHolder.itemImage.setImageBitmap(current.getImageBitmap());
     }
 
@@ -194,6 +206,36 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             });
             dialog.show();
             //Toast.makeText(mContext, "MenuItem clicked at " + getLayoutPosition(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private Bitmap getImageFromUrl(String img_src) throws Exception {
+        imageRetriever = new RetrieveImageTask();
+        return imageRetriever.execute(img_src).get();
+    }
+
+
+
+    public class RetrieveImageTask extends AsyncTask<String, Void, Bitmap> {
+        private Exception exception;
+        private transient Bitmap img;
+
+        @Override
+        protected Bitmap doInBackground(String... urls) {
+            try {
+                URL url = new URL(urls[0]);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                //connection.setDoInput(true);
+                connection.connect();
+                InputStream input = connection.getInputStream();
+                Bitmap myimg = BitmapFactory.decodeStream(input);
+
+                return myimg;
+            }
+            catch (Exception e) {
+                this.exception = e;;
+            }
+            return null;
         }
     }
 }
