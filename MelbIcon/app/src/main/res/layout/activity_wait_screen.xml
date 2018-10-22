@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/c1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".WaitScreen">
+
+    <LinearLayout
+        android:id="@+id/l1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="100px"
+        android:layout_marginRight="100px"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/ordermore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:adjustViewBounds="false"
+            android:background="#00ffffff"
+            android:scaleType="fitCenter"
+            android:paddingHorizontal="15px"
+            android:contentDescription="@string/orderMore"
+            android:src="@mipmap/ordermore" />
+
+        <ImageButton
+            android:id="@+id/checkstatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#00ffffff"
+            android:scaleType="fitCenter"
+            android:paddingHorizontal="15px"
+            android:contentDescription="@string/checkStatus"
+            android:src="@mipmap/checkstatus" />
+
+        <ImageButton
+            android:id="@+id/reqassistance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#00ffffff"
+            android:contentDescription="@string/requestAssistance"
+            android:scaleType="fitCenter"
+            android:paddingHorizontal="15px"
+            android:src="@mipmap/requestassistance" />
+
+
+        <ImageButton
+            android:id="@+id/finalisebill"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:adjustViewBounds="false"
+            android:background="#00ffffff"
+            android:scaleType="fitCenter"
+            android:paddingHorizontal="15px"
+            android:contentDescription="@string/finaliseBill"
+            android:src="@mipmap/paybill" />
+
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

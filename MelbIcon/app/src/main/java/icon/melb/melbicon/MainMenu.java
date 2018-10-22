@@ -17,13 +17,17 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.LogPrinter;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
@@ -38,14 +42,17 @@ import com.google.firebase.database.ValueEventListener;
 
 import io.fabric.sdk.android.Fabric;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static android.content.ContentValues.TAG;
+import static java.security.AccessController.getContext;
 
 public class MainMenu extends AppCompatActivity {
 
@@ -55,11 +62,15 @@ public class MainMenu extends AppCompatActivity {
     private TabLayout tabLayout;
     private List<MenuItem> lstSpecial, lstStarter, lstMain, lstSide, lstDessert, lstDrinks;
     private DatabaseReference mRef;
-    private RetrieveMenuTask retriever;
+    private RetrieveImageTask imageRetriever;
+    //private RetireveMenuTask menuRetriever;
+    private ImageButton homeBtn, viewOrderBtn, assistantBtn;
+    private Button stopButton;
 
     public static List<Order> orders = new ArrayList<>();
     public static Order currentOrder = new Order();
     public static int currentOrderPos = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +78,7 @@ public class MainMenu extends AppCompatActivity {
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main_menu);
 
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        FireBaseUtils.getDatabase();
 
         lstSpecial = new ArrayList<>();
         lstStarter = new ArrayList<>();
@@ -76,7 +87,6 @@ public class MainMenu extends AppCompatActivity {
         lstDessert = new ArrayList<>();
         lstDrinks = new ArrayList<>();
 
-        operateDatabse();
 
         //Pass Order to other activities for use
         /*passOrderToActivity(RecyclerViewAdapter.class);
@@ -95,41 +105,178 @@ public class MainMenu extends AppCompatActivity {
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
-        View headerView = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+        View headerView = ((LayoutInflater) Objects.requireNonNull(getSystemService(Context.LAYOUT_INFLATER_SERVICE)))
                 .inflate(R.layout.customtab, null, false);
 
         setupTabIcons();
+        setButtonAction();
+        operateDatabase();
 
+    }
+
+    private void setButtonAction() {
+
+        homeBtn = (ImageButton) findViewById(R.id.homeButton);
+        viewOrderBtn = (ImageButton) findViewById(R.id.viewOrderButton);
+        assistantBtn = (ImageButton) findViewById(R.id.assistantButton);
+
+        homeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Toast.makeText(getContext(), "Go back home", Toast.LENGTH_SHORT).show();
+                Intent navigate = new Intent(MainMenu.this, WaitScreen.class);
+                startActivity(navigate);
+            }
+        });
+
+        viewOrderBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//              Toast.makeText(getContext(), "Go to view order", Toast.LENGTH_SHORT).show();
+                viewOrder();
+            }
+        });
+
+        assistantBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainMenu.this);
+                View mView = getLayoutInflater().inflate(R.layout.request_assistance_overlay, null);
+
+                mBuilder.setView(mView);
+                final AlertDialog dialog = mBuilder.create();
+
+                dialog.show();
+
+                stopButton = mView.findViewById(R.id.stopButton);
+
+                stopButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.cancel();
+                    }
+                });
+                // Toast.makeText(getContext(), "Ask for assistance", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void viewOrder() {
+
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainMenu.this);
+        View mView = getLayoutInflater().inflate(R.layout.view_order_dialog, null);
+        ImageButton backBtn = (ImageButton) mView.findViewById(R.id.backBtn);
+        ImageButton submitBtn = (ImageButton) mView.findViewById(R.id.submitBtn);
+        final SwipeMenuListView listView = (SwipeMenuListView) mView.findViewById(R.id.listView);
+        final TextView totalPrice = (TextView) mView.findViewById(R.id.totalPrice);
+
+        final ArrayAdapter adapter = new ArrayAdapter(MainMenu.this, android.R.layout.simple_list_item_1,  currentOrder.getOrderItemList());
+
+        listView.setAdapter(adapter);
+
+        SwipeMenuCreator creator = new SwipeMenuCreator() {
+
+            @Override
+            public void create(SwipeMenu menu) {
+                // create "open" item
+                SwipeMenuItem openItem = new SwipeMenuItem(
+                        MainMenu.this);
+
+                // create "delete" item
+                SwipeMenuItem deleteItem = new SwipeMenuItem(
+                        MainMenu.this);
+                // set item background
+                deleteItem.setBackground(new ColorDrawable(Color.rgb(0xF9,
+                        0x3F, 0x25)));
+                // set item width
+                deleteItem.setWidth(170);
+                // set a icon
+                deleteItem.setIcon(R.drawable.ic_action_name);
+                // add to menu
+                menu.addMenuItem(deleteItem);
+            }
+        };
+
+        // set creator
+        listView.setMenuCreator(creator);
+
+        listView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
+                switch (index) {
+                    case 0:
+                        MainMenu.currentOrder.getOrderItemList().remove(index);
+                        listView.setAdapter(adapter);
+                        totalPrice.setText("$" + MainMenu.currentOrder.getTotalPriceOrder());
+                        Log.d("Delete", "Delete");
+                        break;
+                }
+                // false : close the menu; true : not close the menu
+                return false;
+            }
+        });
+
+        totalPrice.setText("$" + MainMenu.currentOrder.getTotalPriceOrder());
+
+        mBuilder.setView(mView);
+        final AlertDialog dialog = mBuilder.create();
+
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        submitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentOrder.getOrderItemList().size() != 0) {
+                    MainMenu.orders.add(MainMenu.currentOrder);
+                    MainMenu.newOrder();
+
+                    Intent navigate = new Intent(MainMenu.this, WaitScreen.class);
+
+                    dialog.dismiss();
+                    startActivity(navigate);
+                    Toast.makeText(MainMenu.this, "Order Confirmed", Toast.LENGTH_SHORT).show();
+                }
+                else { Toast.makeText(MainMenu.this, "Please add a Menu Item, before submitting", Toast.LENGTH_SHORT).show(); }
+            }
+        });
+        dialog.show();
     }
 
     public static void newOrder() {
         currentOrder = new Order();
     }
 
+//////////////////////////////GENERATING MENU/////////////////////////////////////
     private void setupTabIcons() {
+
         View view0 = getLayoutInflater().inflate(R.layout.customtab, null);
         view0.setBackgroundResource(R.mipmap.specialsicons);
-        tabLayout.getTabAt(0).setCustomView(view0);
+        Objects.requireNonNull(tabLayout.getTabAt(0)).setCustomView(view0);
 
         View view1 = getLayoutInflater().inflate(R.layout.customtab, null);
-        view1.setBackgroundResource(R.mipmap.specialsicons); //starters
-        tabLayout.getTabAt(1).setCustomView(view1);
+        view1.setBackgroundResource(R.mipmap.startersicon); //starters
+        Objects.requireNonNull(tabLayout.getTabAt(1)).setCustomView(view1);
 
         View view2 = getLayoutInflater().inflate(R.layout.customtab, null);
         view2.setBackgroundResource(R.mipmap.mainsicon2);
-        tabLayout.getTabAt(2).setCustomView(view2);
+        Objects.requireNonNull(tabLayout.getTabAt(2)).setCustomView(view2);
 
         View view3 = getLayoutInflater().inflate(R.layout.customtab, null);
         view3.setBackgroundResource(R.mipmap.sidesicon2);
-        tabLayout.getTabAt(3).setCustomView(view3);
+        Objects.requireNonNull(tabLayout.getTabAt(3)).setCustomView(view3);
 
         View view4 = getLayoutInflater().inflate(R.layout.customtab, null);
-        view4.setBackgroundResource(R.mipmap.specialsicons); //dessert
-        tabLayout.getTabAt(4).setCustomView(view4);
+        view4.setBackgroundResource(R.mipmap.dessertsicon2); //dessert
+        Objects.requireNonNull(tabLayout.getTabAt(4)).setCustomView(view4);
 
         View view5 = getLayoutInflater().inflate(R.layout.customtab, null);
         view5.setBackgroundResource(R.mipmap.drinksicon);
-        tabLayout.getTabAt(5).setCustomView(view5);
+        Objects.requireNonNull(tabLayout.getTabAt(5)).setCustomView(view5);
     }
 
     @Override
@@ -217,8 +364,8 @@ public class MainMenu extends AppCompatActivity {
             return 6;
         }
     }
-
-    private void operateDatabse() {
+//////////////////////////////////DATABASE///////////////////////////////////////
+    private void operateDatabase() {
         mRef = FirebaseDatabase.getInstance().getReference("menu");
         mRef.keepSynced(true);
 
@@ -238,64 +385,94 @@ public class MainMenu extends AppCompatActivity {
         lstDrinks = getDatabase(drinks);
     }
 
-    private List<MenuItem> getDatabase(DatabaseReference dataRef) {
+    private List<MenuItem> getDatabase(final DatabaseReference dataRef) {
         final List<MenuItem> dataList = new ArrayList<>();
 
         dataRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
+                int index = 0;
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    MenuItem menuItem = child.getValue(MenuItem.class);
-                    try {
-                        menuItem.setImageBitmap(getImageFromUrl(menuItem.getImg_src()));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    dataList.add(menuItem);
-                }
 
-            }
+//                  Log.d(TAG, "getTitle: "+ dataSnapshot.child(Integer.toString(i)).child("title").getValue());
+//                  Log.d(TAG, "getAvailable: " + dataSnapshot.child(Integer.toString(i)).child("available").getValue());
+
+                    if (dataSnapshot.child(Integer.toString(index)).child("available").getValue().equals(true)){
+                        Log.d(TAG, "DISPLAYED");
+
+                        //Log.d(TAG, "Index: " +i);
+
+                        MenuItem menuItem = child.getValue(MenuItem.class);
+
+                        try {
+                            menuItem.setImageBitmap(getImageFromUrl(Objects.requireNonNull(menuItem).getImg_src()));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        dataList.add(menuItem);
+                    }
+                    ++index;
+                    }
+                }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.v(TAG, "loadPost:onCancelled", databaseError.toException());
             }
         });
-
         return dataList;
     }
 
-    public void passOrderToActivity(Class targetActivity) {
-        Intent intent = new Intent(MainMenu.this, targetActivity);
-        intent.putExtra("orders", (Serializable) orders);
-        //getIntent().getSerializableExtra("Order");
-    }
-
     private Bitmap getImageFromUrl(String img_src) throws Exception {
-        retriever = new RetrieveMenuTask();
-        return retriever.execute(img_src).get();
+        imageRetriever = new RetrieveImageTask();
+        return imageRetriever.execute(img_src).get();
     }
 
-    public class RetrieveMenuTask extends AsyncTask<String, Void, Bitmap> {
+
+
+    public class RetrieveImageTask extends AsyncTask<String, Void, Bitmap> {
         private Exception exception;
-        private Bitmap img;
+        private transient Bitmap img;
 
         @Override
         protected Bitmap doInBackground(String... urls) {
             try {
+                    URL url = new URL(urls[0]);
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    //connection.setDoInput(true);
+                    connection.connect();
+                    InputStream input = connection.getInputStream();
+                    Bitmap myimg = BitmapFactory.decodeStream(input);
 
-                URL url = new URL(urls[0]);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                //connection.setDoInput(true);
-                connection.connect();
-                InputStream input = connection.getInputStream();
-                Bitmap myimg = BitmapFactory.decodeStream(input);
-                return myimg;
-            } catch (Exception e) {
+                    return myimg;
+            }
+            catch (Exception e) {
                 this.exception = e;;
             }
             return null;
         }
     }
+//    public class RetrieveMenuTask extends AsyncTask<String, Void, Bitmap> {
+//        private Exception exception;
+//        private transient Bitmap img;
+//
+//        @Override
+//        protected Bitmap doInBackground(String... urls) {
+//            try {
+//                URL url = new URL(urls[0]);
+//                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//                //connection.setDoInput(true);
+//                connection.connect();
+//                InputStream input = connection.getInputStream();
+//                Bitmap myimg = BitmapFactory.decodeStream(input);
+//
+//                return myimg;
+//            }
+//            catch (Exception e) {
+//                this.exception = e;;
+//            }
+//            return null;
+//        }
+//    }
 }

@@ -2,7 +2,9 @@ package icon.melb.melbicon;
 
 import android.graphics.Bitmap;
 
-public class MenuItem {
+import java.io.Serializable;
+
+public class MenuItem implements Serializable{
     private boolean available;
     private String title;
     private String description;
@@ -10,7 +12,8 @@ public class MenuItem {
     private boolean vegetarian;
     private boolean glutenfree;
     private String img_src;
-    private Bitmap imageBitmap;
+    private transient Bitmap imageBitmap;
+
 
     public MenuItem() {
         this.title = "";
@@ -70,22 +73,6 @@ public class MenuItem {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    public void setVegetarian(boolean vegetarian) {
-        vegetarian = vegetarian;
-    }
-
-    public void setImg_src(String img_src) {
-        this.img_src = img_src;
-    }
-
-    public void setGlutenfree(boolean glutenfree) {
-        this.glutenfree = glutenfree;
     }
 
     public void setAvailable(boolean available) {
