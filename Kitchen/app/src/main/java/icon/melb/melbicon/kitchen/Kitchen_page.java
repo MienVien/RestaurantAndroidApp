@@ -39,10 +39,12 @@ public class Kitchen_page extends Activity {
         items.add( new OrderItem( "Burger", 12 ) );
         items.add( new OrderItem( "Chips", 5 ) );
         items.add( new OrderItem( "HSP", 21.5, 2 ) );
+        items.add( new OrderItem( "Spicy Chicken Wing", 3, 5, "mOre ChiLLy Plz") );
 
         orderItems.add( new OrderItem( "Burger", 12 ) );
         orderItems.add( new OrderItem( "Chips", 5 ) );
         orderItems.add( new OrderItem( "HSP", 21.5, 2 ) );
+        orderItems.add( new OrderItem( "Spicy Chicken Wing", 3, 5, "More Chilly plz") );
 
         allMenu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,12 +63,18 @@ public class Kitchen_page extends Activity {
         addRemoveBT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Context context = v.getContext( );
-                Intent intent = new Intent( context, search.class );
-               // Bundle bundle = new Bundle( );
-               // bundle.putSerializable( "all_items", orderItems );
-                intent.putExtra( "all_items", (Serializable) orderItems);
-                context.startActivity( intent );
+                    Context context = v.getContext( );
+                    Intent intent = new Intent( context, search.class );
+                    // Bundle bundle = new Bundle( );
+                    // bundle.putSerializable( "all_items", orderItems );
+                    intent.putExtra( "all_items", (Serializable) orderItems);
+                    context.startActivity( intent );
+
+                Bundle bundle = intent.getExtras( );
+                List<OrderItem> checkedItems = ( List<OrderItem>) bundle.getSerializable( "checked_items" );
+
+                Intent intent1 = new Intent( context, statusChangeAdapter.class );
+                intent1.putExtras( bundle );
             }
         });
         initText( );
@@ -88,9 +96,12 @@ public class Kitchen_page extends Activity {
         KitchenOrder order2 = new KitchenOrder( 3, items );
         KitchenOrder order3 = new KitchenOrder( 4, items );
 
+        KitchenOrder order4 = new KitchenOrder( 1, "More Chilli Plz", items );
+
         add( order1, mKitchenOrderList );
         add( order2, mKitchenOrderList );
         add( order3, mKitchenOrderList );
+        add( order4, mKitchenOrderList );
 
         mKitchenOrderList.size();
 

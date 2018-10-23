@@ -13,6 +13,7 @@ import android.util.Log;
 import java.util.List;
 import java.util.ArrayList;
 import android.content.Context;
+import android.widget.Toast;
 
 public class changeStatus extends AppCompatActivity {
 
@@ -62,6 +63,8 @@ public class changeStatus extends AppCompatActivity {
                     Intent intent = new Intent( context, Kitchen_page.class );
                     intent.putExtra( "order_completed", ko );
                     context.startActivity( intent );
+                }else{
+                    Toast.makeText( v.getContext(), "You haven't completed all order", Toast.LENGTH_LONG  ).show();
                 }
             }
         });

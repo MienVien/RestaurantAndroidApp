@@ -7,6 +7,7 @@ public class OrderItem implements Serializable{
     private double price;
     private double total;
     private int qty;
+    private String notes;
 
     public OrderItem( String title, double price ){
         this( title, price, 1 );
@@ -19,6 +20,16 @@ public class OrderItem implements Serializable{
         total = price*qty;
     }
 
+    public OrderItem( String title, double price, int qty, String notes ){
+        this( title, price, qty );
+        this.notes = notes;
+    }
+
+    public String getNotes( ){
+        if( notes != null )
+            return "\t - Notes: " + notes;
+        return "\n";
+    }
     public String getTitle( ){
         return title;
     }

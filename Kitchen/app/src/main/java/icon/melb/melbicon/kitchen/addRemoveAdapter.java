@@ -146,6 +146,7 @@ public class addRemoveAdapter extends RecyclerView.Adapter<addRemoveAdapter.addR
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             mMenuItem.clear();
+            Log.d( TAG,"Calling: " +  results.values.toString() );
             mMenuItem.addAll( (List<OrderItem>) results.values );
             Log.d( TAG, "publishing: " + mMenuItem.toString() );
             notifyDataSetChanged();

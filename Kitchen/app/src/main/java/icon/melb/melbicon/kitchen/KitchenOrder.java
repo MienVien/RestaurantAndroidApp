@@ -30,10 +30,10 @@ public class KitchenOrder implements Serializable{
         customerStatus = "IN PROGRESS";
         kitchenStatus = "RECEIVED";
     }
-    public KitchenOrder(int dishQty, String orderNotes, List<Item> orderMenuItemList){
+    public KitchenOrder(int dishQty, String orderNotes, List<OrderItem> orderMenuItemList){
         this.dishQty = dishQty; //Total Items ordered per Table
         this.orderDateTime = Calendar.getInstance().getTime();
-        this.orderItemList = orderItemList;
+        this.orderItemList = orderMenuItemList;
         this.orderNotes = orderNotes;
         customerStatus = "IN PROGRESS";
         kitchenStatus = "RECEIVED";

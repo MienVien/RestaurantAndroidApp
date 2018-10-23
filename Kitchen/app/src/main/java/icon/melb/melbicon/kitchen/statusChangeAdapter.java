@@ -1,6 +1,8 @@
 package icon.melb.melbicon.kitchen;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,6 +16,7 @@ import android.widget.LinearLayout;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.widget.TextView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +26,7 @@ public class statusChangeAdapter extends RecyclerView.Adapter<statusChangeAdapte
     private List<KitchenOrder> mKitchenItem = new ArrayList<>();
     private List<OrderItem> mMenuItem = new ArrayList<>();
     private Context mContext;
-    private List<Item> selectedItems = new ArrayList<>();
+    private List<OrderItem> selectedItems = new ArrayList<>();
 
     public statusChangeAdapter ( List<OrderItem> mMenuItem, Context mContext ){
         this.mMenuItem = mMenuItem;
@@ -36,7 +39,6 @@ public class statusChangeAdapter extends RecyclerView.Adapter<statusChangeAdapte
         Log.d( TAG, "onCreateViewHolder: entered" );
 
         View view = LayoutInflater.from( viewGroup.getContext() ).inflate(R.layout.activity_add_remove, viewGroup, false );
-
         return new statusViewHolder( view ) ;
     }
 
@@ -56,7 +58,7 @@ public class statusChangeAdapter extends RecyclerView.Adapter<statusChangeAdapte
 
     public class statusViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         LinearLayout screen;
-       CheckedTextView itemList;
+        CheckedTextView itemList;
         SparseBooleanArray itemStateArray = new SparseBooleanArray( );
 
         public statusViewHolder(@NonNull View itemView) {
@@ -72,7 +74,7 @@ public class statusChangeAdapter extends RecyclerView.Adapter<statusChangeAdapte
             else
                 itemList.setChecked(true);
 
-            itemList.setText( String.valueOf(mMenuItem.get(position).getTitle( )));
+            itemList.setText( String.valueOf( mMenuItem.get(position).getTitle( ) ) + String.valueOf( mMenuItem.get(position).getNotes( ) ) );
         }
 
         @Override
@@ -81,10 +83,27 @@ public class statusChangeAdapter extends RecyclerView.Adapter<statusChangeAdapte
             if( !itemStateArray.get( adapterPosition, false) ) {
                 itemList.setChecked(true);
                 itemStateArray.put(adapterPosition, true);
+                OrderItem item = search( itemList.getText().toString( ).trim() );
+                selectedItems.add( item );
+
+                Bundle bundle = new Bundle( );
+                Context context = view.getContext( );
+                Intent intent = new Intent( context, Kitchen_page.class );
+                bundle.putSerializable( "checked_items", (Serializable) selectedItems );
+                intent.putExtras( bundle );
+
             }else{
                 itemList.setChecked( false );
                 itemStateArray.put( adapterPosition, false );
             }
+        }
+
+        private OrderItem search( String title ){
+            for ( OrderItem item : mMenuItem ){
+                if( item.getTitle().equals( title ))
+                    return item;
+            }
+            return null;
         }
     }
 }
