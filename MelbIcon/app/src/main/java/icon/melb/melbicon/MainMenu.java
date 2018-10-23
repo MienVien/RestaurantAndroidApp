@@ -63,7 +63,7 @@ public class MainMenu extends AppCompatActivity {
     private List<MenuItem> lstSpecial, lstStarter, lstMain, lstSide, lstDessert, lstDrinks;
     private DatabaseReference mRef;
     private RetrieveImageTask imageRetriever;
-    //private RetireveMenuTask menuRetriever;
+    //private RetrieveMenuTask menuRetriever;
     private ImageButton homeBtn, viewOrderBtn, assistantBtn;
     private Button stopButton;
 
@@ -78,15 +78,12 @@ public class MainMenu extends AppCompatActivity {
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main_menu);
 
-        FireBaseUtils.getDatabase();
-
-        lstSpecial = new ArrayList<>();
-        lstStarter = new ArrayList<>();
-        lstMain = new ArrayList<>();
-        lstSide = new ArrayList<>();
-        lstDessert = new ArrayList<>();
-        lstDrinks = new ArrayList<>();
-
+        lstSpecial = MainActivity.lstSpecial;
+        lstStarter = MainActivity.lstStarter;
+        lstMain = MainActivity.lstMain;
+        lstSide = MainActivity.lstSide;
+        lstDessert = MainActivity.lstDessert;
+        lstDrinks = MainActivity.lstDrinks;
 
         //Pass Order to other activities for use
         /*passOrderToActivity(RecyclerViewAdapter.class);
@@ -110,7 +107,8 @@ public class MainMenu extends AppCompatActivity {
 
         setupTabIcons();
         setButtonAction();
-        operateDatabase();
+        if (lstSpecial.size() == 0)
+            operateDatabase();
 
     }
 
@@ -364,8 +362,17 @@ public class MainMenu extends AppCompatActivity {
             return 6;
         }
     }
-//////////////////////////////////DATABASE///////////////////////////////////////
+
+    //////////////////////////////////DATABASE///////////////////////////////////////
+
     private void operateDatabase() {
+        lstSpecial = new ArrayList<>();
+        lstStarter = new ArrayList<>();
+        lstMain = new ArrayList<>();
+        lstSide = new ArrayList<>();
+        lstDessert = new ArrayList<>();
+        lstDrinks = new ArrayList<>();
+
         mRef = FirebaseDatabase.getInstance().getReference("menu");
         mRef.keepSynced(true);
 
@@ -413,8 +420,8 @@ public class MainMenu extends AppCompatActivity {
                         dataList.add(menuItem);
                     }
                     ++index;
-                    }
                 }
+            }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -438,14 +445,14 @@ public class MainMenu extends AppCompatActivity {
         @Override
         protected Bitmap doInBackground(String... urls) {
             try {
-                    URL url = new URL(urls[0]);
-                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                    //connection.setDoInput(true);
-                    connection.connect();
-                    InputStream input = connection.getInputStream();
-                    Bitmap myimg = BitmapFactory.decodeStream(input);
+                URL url = new URL(urls[0]);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                //connection.setDoInput(true);
+                connection.connect();
+                InputStream input = connection.getInputStream();
+                Bitmap myimg = BitmapFactory.decodeStream(input);
 
-                    return myimg;
+                return myimg;
             }
             catch (Exception e) {
                 this.exception = e;;
@@ -453,6 +460,7 @@ public class MainMenu extends AppCompatActivity {
             return null;
         }
     }
+
 //    public class RetrieveMenuTask extends AsyncTask<String, Void, Bitmap> {
 //        private Exception exception;
 //        private transient Bitmap img;
