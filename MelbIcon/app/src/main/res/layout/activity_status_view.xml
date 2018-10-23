@@ -35,6 +35,7 @@
         android:layout_height="480dp"
         android:layout_weight="1"
         android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/l3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/l1">
 

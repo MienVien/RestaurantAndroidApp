@@ -15,7 +15,7 @@
 
         <LinearLayout
             android:id="@+id/itemContent"
-            android:layout_width="114dp"
+            android:layout_width="125dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical">
@@ -23,7 +23,7 @@
             <TextView
                 android:id="@+id/itemName"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="70dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="5dp"
                 android:layout_weight="1"
@@ -36,16 +36,18 @@
                 android:layout_height="100dp"
                 android:layout_marginLeft="5dp"
                 android:layout_weight="1"
-                android:text="Description of Item" />
+                android:text="Description of Item"
+                android:textStyle="italic" />
 
             <TextView
                 android:id="@+id/itemPrice"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:layout_marginBottom="5dp"
                 android:layout_marginLeft="5dp"
                 android:layout_weight="1"
-                android:text="Price" />
+                android:text="Price"
+                android:textSize="22sp" />
         </LinearLayout>
 
         <ImageView
