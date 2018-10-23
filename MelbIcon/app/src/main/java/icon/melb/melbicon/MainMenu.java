@@ -405,7 +405,7 @@ public class MainMenu extends AppCompatActivity {
                         MenuItem menuItem = child.getValue(MenuItem.class);
 
                         try {
-                            //menuItem.setImageBitmap(getImageFromUrl(Objects.requireNonNull(menuItem).getImg_src()));
+                            menuItem.setImageBitmap(getImageFromUrl(Objects.requireNonNull(menuItem).getImg_src()));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

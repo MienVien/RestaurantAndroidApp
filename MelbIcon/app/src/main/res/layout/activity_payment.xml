@@ -107,10 +107,10 @@
 
     <TextView
         android:id="@+id/PaymentHeader"
-        android:layout_width="348dp"
+        android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="20dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/cambay"
@@ -118,10 +118,11 @@
         android:textAlignment="center"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/horizontalLine3"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/horizontalLine2"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.757"
+        app:layout_constraintVertical_bias="0.837"
         tools:text="CHOOSE PAYMENT METHOD" />
 
     <View
@@ -131,13 +132,9 @@
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/header"
         android:layout_marginBottom="140dp"
-        android:layout_marginEnd="44dp"
         android:layout_marginTop="93dp"
         android:background="#FF525252"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/PaymentHeader"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/paymentRecyclerView" />
 
@@ -164,11 +161,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="180dp"
-        android:layout_marginStart="460dp"
+        android:layout_marginEnd="8dp"
         android:text="GRAND TOTAL:"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/editText" />
 
 
     <TextView
@@ -187,13 +184,13 @@
         android:id="@+id/p1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="19dp"
         android:layout_marginEnd="80dp"
         android:layout_marginStart="80dp"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageButton
@@ -265,14 +262,13 @@
         android:id="@+id/editText"
         android:layout_width="210dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="96dp"
-        android:layout_marginTop="2dp"
+        android:layout_marginEnd="80dp"
         android:ems="10"
         android:inputType="number"
         android:text="$ 2000.00"
         android:textAlignment="center"
         android:textSize="35sp"
-        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/paymentRecyclerView" />
 
 </android.support.constraint.ConstraintLayout>

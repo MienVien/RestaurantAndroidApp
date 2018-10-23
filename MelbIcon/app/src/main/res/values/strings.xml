@@ -26,4 +26,7 @@
     <string name="table">ORDER STATUS</string>
     <string name="back_button" />
     <string name="title_activity_status_view" />
+    <string name="homebutton">homeButton</string>
+    <string name="vieworderbutton">viewOrderButton</string>
+    <string name="assistantbutton">assistantButton</string>
 </resources>
