@@ -63,6 +63,8 @@ public class MainMenu extends AppCompatActivity {
     private TabLayout tabLayout;
     private List<MenuItem> lstSpecial, lstStarter, lstMain, lstSide, lstDessert, lstDrinks;
     private DatabaseReference mRef;
+    private DatabaseReference oRef;
+
     private RetrieveImageTask imageRetriever;
     //private RetrieveMenuTask menuRetriever;
     private ImageButton homeBtn, viewOrderBtn, assistantBtn;
@@ -108,6 +110,7 @@ public class MainMenu extends AppCompatActivity {
 
         setupTabIcons();
         setButtonAction();
+
         if (lstSpecial.size() == 0)
             operateDatabase();
 
@@ -232,11 +235,35 @@ public class MainMenu extends AppCompatActivity {
             public void onClick(View v) {
                 if (currentOrder.getOrderItemList().size() != 0) {
                     MainMenu.orders.add(MainMenu.currentOrder);
-                    MainMenu.newOrder();
 
                     Intent navigate = new Intent(MainMenu.this, WaitScreen.class);
 
                     dialog.dismiss();
+                    //////////////HERE....!!!!&&&&.//////
+                    oRef = FirebaseDatabase.getInstance().getReference("order");
+                    DatabaseReference ds = oRef.child("order").child("0");
+                    DatabaseReference oi = ds.child("1");
+                    oi.child("dishQty").setValue(currentOrder.getDishQty());
+                    oi.child("date").setValue(currentOrder.getOrderTimeDate().toString());
+                    DatabaseReference oi2 = oi.child("items");
+                    oi2.setValue("test");
+                    Integer count = 0;
+
+                    Log.d(TAG, "orderItemSize: " + currentOrder.getOrderItemList().size());
+                    for(OrderItem orderItem : currentOrder.getOrderItemList()) {
+                        DatabaseReference oi3;
+                        oi3 = oi2.child(count.toString());
+                        ++count;
+                        oi3.setValue("test");
+                        oi3.child("name").setValue(orderItem.getTitle());
+
+                        Log.d(TAG, "orderItemName " + orderItem.getTitle());
+                    }
+                    MainMenu.newOrder();
+
+
+                    //oRef.child("order").setValue(student);
+                    //////////////////////////////////////
                     startActivity(navigate);
                     Toast.makeText(MainMenu.this, "Order Confirmed", Toast.LENGTH_SHORT).show();
                 }
@@ -437,8 +464,6 @@ public class MainMenu extends AppCompatActivity {
         return imageRetriever.execute(img_src).get();
     }
 
-
-
     public class RetrieveImageTask extends icon.melb.melbicon.RetrieveImageTask {
         private Exception exception;
         private transient Bitmap img;
@@ -448,7 +473,6 @@ public class MainMenu extends AppCompatActivity {
         @Override
         protected Bitmap doInBackground(String... urls) {
             try {
-<<<<<<< HEAD
                 URL url = new URL(urls[0]);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 //connection.setDoInput(true);
@@ -457,17 +481,8 @@ public class MainMenu extends AppCompatActivity {
                 Bitmap myimg = BitmapFactory.decodeStream(input);
 
                 return myimg;
-=======
-                    URL url = new URL(urls[0]);
-                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                    //connection.setDoInput(true);
-                    connection.connect();
-                    InputStream input = connection.getInputStream();
-                    Bitmap myimg = BitmapFactory.decodeStream(input);
 
-                    return myimg;
 
->>>>>>> origin/master
             }
             catch (Exception e) {
                 this.exception = e;;
@@ -475,7 +490,7 @@ public class MainMenu extends AppCompatActivity {
             return null;
         }
     }
-<<<<<<< HEAD
+
 
 //    public class RetrieveMenuTask extends AsyncTask<String, Void, Bitmap> {
 //        private Exception exception;
@@ -499,6 +514,5 @@ public class MainMenu extends AppCompatActivity {
 //            return null;
 //        }
 //    }
-=======
->>>>>>> origin/master
+
 }
