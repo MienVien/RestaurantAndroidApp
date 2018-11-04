@@ -4,17 +4,24 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
-import android.util.Log;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.LinearLayoutManager;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import static android.content.ContentValues.TAG;
-import java.util.List;
 
 public class Kitchen_page extends Activity {
 
@@ -24,13 +31,18 @@ public class Kitchen_page extends Activity {
     private List<KitchenOrder> mKitchenOrderList = new ArrayList<>();
     private List<KitchenOrder> mCompletedOrderList = new ArrayList<>();
 
-    private List<OrderItem> items = new ArrayList<>();
-    private List<OrderItem> orderItems = new ArrayList<>();
+    private static List<OrderItem> items = new ArrayList<>();
+    private static List<OrderItem> orderItems = new ArrayList<>();
+
+    private static List<String> itemNames = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kitchen_page);
+
+        operateDatabase();
+
 
         allMenu = findViewById( R.id.allMenu );
         completedOrder = findViewById( R.id.completedOrder );
@@ -78,8 +90,37 @@ public class Kitchen_page extends Activity {
             }
         });
         initText( );
+
+        Log.d("Order Item", " " + itemNames);
+    }
+    private void operateDatabase() {
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference("order");
+        DatabaseReference myRef = database.child("order");
+        DatabaseReference items = myRef.child("0").child("1").child("items");
+
+        itemNames = getDatabase(items);
     }
 
+    private List<String> getDatabase(DatabaseReference dataRef) {
+        final List<String> itemsList = new ArrayList<>();
+
+        dataRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot child: dataSnapshot.getChildren()) {
+                    String item = (String) child.child("name").getValue();
+                    itemsList.add(item);
+                    Log.d("ITEM", item);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        return itemsList;
+    }
     private void initText( ){
         Log.d( TAG, "initText: preparing text" );
 
