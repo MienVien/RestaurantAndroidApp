@@ -119,7 +119,7 @@ public class MainActivity extends Activity {
         mRef = FirebaseDatabase.getInstance().getReference("menu");
         mRef.keepSynced(true);
 
-        DatabaseReference menu = mRef.child("menu");
+        DatabaseReference menu = mRef;
         DatabaseReference special = menu.child("0").child("special");
         DatabaseReference starter = menu.child("1").child("starter");
         DatabaseReference main = menu.child("2").child("main");
@@ -141,16 +141,9 @@ public class MainActivity extends Activity {
         dataRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                int index = 0;
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
 
-//                  Log.d(TAG, "getTitle: "+ dataSnapshot.child(Integer.toString(i)).child("title").getValue());
-//                  Log.d(TAG, "getAvailable: " + dataSnapshot.child(Integer.toString(i)).child("available").getValue());
-
-                    if (dataSnapshot.child(Integer.toString(index)).child("available").getValue().equals(true)){
-                        Log.d(TAG, "DISPLAYED");
-
-                        //Log.d(TAG, "Index: " +i);
+                    if (child.child("available").getValue().equals(true)){
 
                         MenuItem menuItem = child.getValue(MenuItem.class);
 
@@ -162,7 +155,6 @@ public class MainActivity extends Activity {
 
                         dataList.add(menuItem);
                     }
-                    ++index;
                 }
             }
 
