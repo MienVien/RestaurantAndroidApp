@@ -88,10 +88,6 @@ public class MainMenu extends AppCompatActivity {
         lstDessert = MainActivity.lstDessert;
         lstDrinks = MainActivity.lstDrinks;
 
-        //Pass Order to other activities for use
-        /*passOrderToActivity(RecyclerViewAdapter.class);
-        passOrderToActivity(Tab1_Specials.class);*/
-
         // Create the adapter that will return a fragment for each of the six
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -111,9 +107,9 @@ public class MainMenu extends AppCompatActivity {
         setupTabIcons();
         setButtonAction();
 
-        if (lstSpecial.size() == 0)
+        /*if (lstSpecial.size() == 0)
             operateDatabase();
-
+        */
     }
 
     private void setButtonAction() {

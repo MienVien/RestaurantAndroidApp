@@ -86,6 +86,7 @@ public class MainActivity extends Activity {
         editor.putString("lstDrinks", jsonlstDrinks);
 
         editor.apply();
+        Log.i("SaveData", "Saving Data");
     }
 
     private void loadData() {
@@ -106,6 +107,7 @@ public class MainActivity extends Activity {
         lstDrinks = gson.fromJson(jsonlstDrinks, type);
         if (lstSpecial == null || lstSpecial.size() == 0) {
             operateDatabase();
+            Log.i("LoadData","Loading data");
         }
     }
     private void operateDatabase() {
@@ -119,7 +121,7 @@ public class MainActivity extends Activity {
         mRef = FirebaseDatabase.getInstance().getReference("menu");
         mRef.keepSynced(true);
 
-        DatabaseReference menu = mRef.child("menu");
+        DatabaseReference menu = mRef;
         DatabaseReference special = menu.child("0").child("special");
         DatabaseReference starter = menu.child("1").child("starter");
         DatabaseReference main = menu.child("2").child("main");
@@ -141,28 +143,20 @@ public class MainActivity extends Activity {
         dataRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                int index = 0;
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
 
-//                  Log.d(TAG, "getTitle: "+ dataSnapshot.child(Integer.toString(i)).child("title").getValue());
-//                  Log.d(TAG, "getAvailable: " + dataSnapshot.child(Integer.toString(i)).child("available").getValue());
-
-                    if (dataSnapshot.child(Integer.toString(index)).child("available").getValue().equals(true)){
-                        Log.d(TAG, "DISPLAYED");
-
-                        //Log.d(TAG, "Index: " +i);
+                    if (child.child("available").getValue().equals(true)){
 
                         MenuItem menuItem = child.getValue(MenuItem.class);
 
                         try {
-                            menuItem.setImageBitmap(getImageFromUrl(Objects.requireNonNull(menuItem).getImg_src()));
+                            //menuItem.setImageBitmap(getImageFromUrl(Objects.requireNonNull(menuItem).getImg_src()));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
 
                         dataList.add(menuItem);
                     }
-                    ++index;
                 }
             }
 
