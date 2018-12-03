@@ -128,6 +128,7 @@ public class MainActivity extends Activity {
         String jsonlstDessert = sharedPreferences.getString("lstDessert", null);
         String jsonlstDrinks = sharedPreferences.getString("lstDrinks", null);
         Type type = new TypeToken<ArrayList<MenuItem>>() {}.getType();
+
         lstSpecial = gson.fromJson(jsonlstSpecial, type);
         lstStarter = gson.fromJson(jsonlstStarter, type);
         lstMain = gson.fromJson(jsonlstMain, type);
@@ -156,14 +157,14 @@ public class MainActivity extends Activity {
         DatabaseReference main = menu.child("2").child("main");
         DatabaseReference side = menu.child("3").child("side");
         DatabaseReference dessert = menu.child("4").child("dessert");
-        //DatabaseReference drinks = menu.child("5").child("drinks");
+        DatabaseReference drinks = menu.child("5").child("drinks");
 
         lstSpecial = getDatabase(special);
         lstStarter = getDatabase(starter);
         lstMain = getDatabase(main);
         lstSide = getDatabase(side);
         lstDessert = getDatabase(dessert);
-        //lstDrinks = getDatabase(drinks);
+        lstDrinks = getDatabase(drinks);
     }
 
     private List<MenuItem> getDatabase(final DatabaseReference dataRef) {

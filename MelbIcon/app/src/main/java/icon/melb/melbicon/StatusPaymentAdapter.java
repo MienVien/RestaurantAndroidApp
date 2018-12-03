@@ -1,6 +1,7 @@
 package icon.melb.melbicon;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -74,20 +75,26 @@ public class StatusPaymentAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
     }
 
-    private void configureViewHolder1(OrderViewHolder vh1, int position) {
-    Order order = (Order) items.get(position);
+//    @Override
+//    public void onSaveInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//        outState.putSerializable("d.list.data", adapter.getState());
+//    }
+
+    private void configureViewHolder1(OrderViewHolder vh1, int positionH) {
+    Order order = (Order) items.get(positionH);
 
         if (order != null) {
-            ++index;
-            vh1.orderID.setText("ORDER#"+ index);
-            vh1.dishQty.setText("DISHES: "+Integer.toString(((Order) items.get(position)).getOrderItemList().size()));
+            //++index;
+            vh1.orderID.setText("ORDER#"+ items.indexOf(order));
+            vh1.dishQty.setText("DISHES: "+Integer.toString(((Order) items.get(positionH)).getOrderItemList().size()));
             vh1.orderDateTime.setText("Ordered: "+ order.getOrderTimeDate().toString());
             vh1.orderStatus.setText("STATUS: "+ order.getCustomerStatus());
         }
     }
 
-    private void configureViewHolder2(OrderItemViewHolder vh2, int position) {
-        OrderItem orderItem = (OrderItem) items.get(position);
+    private void configureViewHolder2(OrderItemViewHolder vh2, int positionB) {
+        OrderItem orderItem = (OrderItem) items.get(positionB);
         if (orderItem != null) {
             vh2.title.setText(orderItem.getTitle());
             vh2.price.setText("$"+Double.toString(orderItem.getPrice()));
