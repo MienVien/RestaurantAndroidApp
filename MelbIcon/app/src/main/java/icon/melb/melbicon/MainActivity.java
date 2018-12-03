@@ -2,6 +2,8 @@ package icon.melb.melbicon;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -13,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -36,6 +39,7 @@ public class MainActivity extends Activity {
     private RetrieveImageTask imageRetriever;
     private DatabaseReference mRef;
     public static List<MenuItem> lstSpecial, lstStarter, lstMain, lstSide, lstDessert, lstDrinks;
+    public static int tableNo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,12 +57,37 @@ public class MainActivity extends Activity {
         loadData();
         saveData();
 
+        enterTableNo();
+
         layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 enterMenu();
             }
         });
+    }
+
+    private void enterTableNo() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Table Number");
+        final EditText input = new EditText(this);
+        builder.setView(input);
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                tableNo = Integer.parseInt(input.getText().toString().trim());
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
     }
 
     private void enterMenu() {
@@ -150,7 +179,7 @@ public class MainActivity extends Activity {
                         MenuItem menuItem = child.getValue(MenuItem.class);
 
                         try {
-                            //menuItem.setImageBitmap(getImageFromUrl(Objects.requireNonNull(menuItem).getImg_src()));
+                            menuItem.setImageBitmap(getImageFromUrl(Objects.requireNonNull(menuItem).getImg_src()));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

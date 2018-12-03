@@ -11,13 +11,16 @@ public class Order {
     private String customerStatus;
     private String kitchenStatus;
     private List<OrderItem> combinedOrderItemList;
+    protected static int orderCount = 0;
+    private int orderID;
+    private int tableNo;
 
     public Order() {
         this.dishQty = 1;
         this.orderDateTime = Calendar.getInstance().getTime();
         combinedOrderItemList = new ArrayList<>();
         customerStatus = "IN PROGRESS";
-        kitchenStatus = "IN RECEIVED";
+        kitchenStatus = "RECEIVED";
     }
 
     public Order(int dishQty, List<OrderItem> orderMenuItemList){
@@ -29,7 +32,7 @@ public class Order {
     }
 
     public int getDishQty(){
-        return dishQty;
+        return combinedOrderItemList.size();
     }
     public Date getOrderTimeDate(){
         return orderDateTime;
@@ -67,6 +70,22 @@ public class Order {
         else{
             this.kitchenStatus = "COMPLETED";
         }
+    }
+
+    public void setTableNo(int tableNo) {
+        this.tableNo = tableNo;
+    }
+
+    public int getTableNo() {
+        return tableNo;
+    }
+
+    public void setOrderID(int orderID) {
+        this.orderID = orderID;
+    }
+
+    public int getOrderID() {
+        return orderID;
     }
 
 }

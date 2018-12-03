@@ -73,6 +73,8 @@ public class MainMenu extends AppCompatActivity {
     public static List<Order> orders = new ArrayList<>();
     public static Order currentOrder = new Order();
     public static int currentOrderPos = 0;
+    public static int tableNo;
+    public static int orderCount = 0;
 
 
     @Override
@@ -80,6 +82,8 @@ public class MainMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main_menu);
+
+        tableNo = MainActivity.tableNo;
 
         lstSpecial = MainActivity.lstSpecial;
         lstStarter = MainActivity.lstStarter;
@@ -237,10 +241,25 @@ public class MainMenu extends AppCompatActivity {
                     dialog.dismiss();
                     //////////////HERE....!!!!&&&&.//////
                     oRef = FirebaseDatabase.getInstance().getReference("order");
-                    DatabaseReference ds = oRef.child("order").child("0");
-                    DatabaseReference oi = ds.child("1");
+                    //DatabaseReference ds = oRef.child("order").child("0");
+
+                    oRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            orderCount = (int) dataSnapshot.getChildrenCount();
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                    currentOrder.setOrderID(++orderCount);
+                    DatabaseReference oi = oRef.child("" + currentOrder.getOrderID());
+                    oi.child("tableNo").setValue(tableNo);
                     oi.child("dishQty").setValue(currentOrder.getDishQty());
                     oi.child("date").setValue(currentOrder.getOrderTimeDate().toString());
+                    oi.child("kitchenStatus").setValue(currentOrder.getKitchenStatus());
                     DatabaseReference oi2 = oi.child("items");
                     oi2.setValue("test");
                     Integer count = 0;
@@ -270,6 +289,8 @@ public class MainMenu extends AppCompatActivity {
     }
 
     public static void newOrder() {
+
+        currentOrder.setTableNo(tableNo);
         currentOrder = new Order();
     }
 
