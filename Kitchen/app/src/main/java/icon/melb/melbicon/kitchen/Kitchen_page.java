@@ -95,32 +95,34 @@ public class Kitchen_page extends Activity {
     private void operateDatabase() {
         DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("order");
         //DatabaseReference myRef = database.child("order");
-        myRef.addValueEventListener(new ValueEventListener() {
+        /*myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot child: dataSnapshot.getChildren()) {
 
+                }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        });
-        DatabaseReference items = myRef.child("0").child("1").child("items");
+        });*/
+        DatabaseReference items = myRef.child("1").child("items");
 
-        itemNames = getDatabase(items);
+        getDatabase(items);
     }
 
-    private List<String> getDatabase(DatabaseReference dataRef) {
-        final List<String> itemsList = new ArrayList<>();
+    private void getDatabase(DatabaseReference dataRef) {
 
         dataRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot child: dataSnapshot.getChildren()) {
-                    String item = (String) child.child("name").getValue();
-                    itemsList.add(item);
-                    Log.d("ITEM", item);
+                    String itemName = (String) child.child("name").getValue();
+                    itemNames.add(itemName);
+                    Log.d("ITEM", itemName);
+                    Log.d("ItemList1", "" + itemNames);
                 }
             }
 
@@ -129,7 +131,6 @@ public class Kitchen_page extends Activity {
 
             }
         });
-        return itemsList;
     }
     private void initText( ){
         Log.d( TAG, "initText: preparing text" );
