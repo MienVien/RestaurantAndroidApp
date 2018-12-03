@@ -230,6 +230,8 @@ public class MainMenu extends AppCompatActivity {
             }
         });
 
+        getOrderRef();
+
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -240,20 +242,7 @@ public class MainMenu extends AppCompatActivity {
 
                     dialog.dismiss();
                     //////////////HERE....!!!!&&&&.//////
-                    oRef = FirebaseDatabase.getInstance().getReference("order");
-                    //DatabaseReference ds = oRef.child("order").child("0");
 
-                    oRef.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            orderCount = (int) dataSnapshot.getChildrenCount();
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
                     currentOrder.setOrderID(++orderCount);
                     DatabaseReference oi = oRef.child("" + currentOrder.getOrderID());
                     oi.child("tableNo").setValue(tableNo);
@@ -292,6 +281,23 @@ public class MainMenu extends AppCompatActivity {
 
         currentOrder.setTableNo(tableNo);
         currentOrder = new Order();
+    }
+
+    private void getOrderRef() {
+        oRef = FirebaseDatabase.getInstance().getReference("order");
+        //DatabaseReference ds = oRef.child("order").child("0");
+
+        oRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                orderCount = (int) dataSnapshot.getChildrenCount();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
 //////////////////////////////GENERATING MENU/////////////////////////////////////
