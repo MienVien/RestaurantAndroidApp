@@ -43,7 +43,6 @@ public class Kitchen_page extends Activity {
 
         operateDatabase();
 
-
         allMenu = findViewById( R.id.allMenu );
         completedOrder = findViewById( R.id.completedOrder );
         addRemoveBT = findViewById( R.id.addRemoveBT );
@@ -94,8 +93,19 @@ public class Kitchen_page extends Activity {
         Log.d("Order Item", " " + itemNames);
     }
     private void operateDatabase() {
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference("order");
-        DatabaseReference myRef = database.child("order");
+        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("order");
+        //DatabaseReference myRef = database.child("order");
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         DatabaseReference items = myRef.child("0").child("1").child("items");
 
         itemNames = getDatabase(items);
