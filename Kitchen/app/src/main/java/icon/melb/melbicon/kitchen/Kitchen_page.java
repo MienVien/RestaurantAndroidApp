@@ -95,11 +95,17 @@ public class Kitchen_page extends Activity {
     private void operateDatabase() {
         DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("order");
         //DatabaseReference myRef = database.child("order");
-        /*myRef.addValueEventListener(new ValueEventListener() {
+        myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot child: dataSnapshot.getChildren()) {
-
+                    String date = (String) child.child("date").getValue();
+                    long dishQty = (long) child.child("dishQty").getValue();
+                    long tableNo = (long) child.child("tableNo").getValue();
+                    String kitchenStatus = (String) child.child("kitchenStatus").getValue();
+                    DatabaseReference items = child.child("items").getRef();
+                    getItemNames(items);
+                    Log.d("Retrieved_Data", "date: " + date + "\ndishQty: " + dishQty + "\ntableNo: " + tableNo + "\nitems: " + itemNames);
                 }
             }
 
@@ -107,13 +113,13 @@ public class Kitchen_page extends Activity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        });*/
-        DatabaseReference items = myRef.child("1").child("items");
+        });
+        //DatabaseReference items = myRef.child("1").child("items");
 
-        getDatabase(items);
+        //getDatabase(items);
     }
 
-    private void getDatabase(DatabaseReference dataRef) {
+    private void getItemNames(DatabaseReference dataRef) {
 
         dataRef.addValueEventListener(new ValueEventListener() {
             @Override
